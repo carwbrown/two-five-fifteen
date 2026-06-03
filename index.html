@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2·5·15 Workout Method</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0d0d0d; --surface:#161616; --card:#1c1c1c; --border:#2c2c2c;
+    --white:#f0ede8; --muted:#777; --dim:#aaa;
+    --gold:#c8a96e; --red:#e05c5c; --blue:#5b9bd5; --green:#52b788;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;}
+
+  /* HEADER */
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:26px 22px 18px;position:sticky;top:0;z-index:100;}
+  .wordmark{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,10vw,72px);line-height:1;letter-spacing:.06em;display:flex;align-items:baseline;gap:.04em;}
+  .wordmark .n1{color:var(--gold);} .wordmark .dot{color:#333;font-size:.55em;} .wordmark .n2{color:var(--red);} .wordmark .n3{color:var(--blue);}
+  .pillrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
+  .pill{display:flex;align-items:center;gap:8px;border-radius:3px;padding:6px 11px;}
+  .pill-gold{background:rgba(200,169,110,.12);border:1px solid rgba(200,169,110,.3);}
+  .pill-red{background:rgba(224,92,92,.12);border:1px solid rgba(224,92,92,.3);}
+  .pill-blue{background:rgba(91,155,213,.12);border:1px solid rgba(91,155,213,.3);}
+  .pill-num{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;}
+  .pill-gold .pill-num{color:var(--gold);} .pill-red .pill-num{color:var(--red);} .pill-blue .pill-num{color:var(--blue);}
+  .pill-text strong{display:block;font-size:12px;font-weight:700;color:var(--white);}
+  .pill-text span{font-size:11px;color:var(--muted);}
+
+  /* NAV */
+  .nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 18px;display:flex;overflow-x:auto;scrollbar-width:none;}
+  .nav::-webkit-scrollbar{display:none;}
+  .tab{padding:12px 20px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;white-space:nowrap;transition:color .15s,border-color .15s;}
+  .tab:hover{color:var(--dim);}
+  .tab.active{color:var(--white);border-bottom-color:var(--gold);}
+
+  /* LAYOUT */
+  .main{padding:18px;max-width:860px;margin:0 auto;}
+  .section{display:none;} .section.active{display:block;}
+  .sec-head{margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.06em;}
+  .sec-sub{font-size:12px;color:var(--muted);margin-top:4px;font-weight:300;}
+
+  /* WEEK DISPLAY */
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:20px;}
+  @media(max-width:500px){.week-grid{grid-template-columns:repeat(4,1fr);}}
+  .day{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:9px 5px;text-align:center;}
+  .day.rest{opacity:.35;}
+  .day.session-a{border-top:2px solid var(--gold);}
+  .day.session-b{border-top:2px solid var(--blue);}
+  .day-name{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  .day-label{font-family:'Bebas Neue',sans-serif;font-size:13px;margin-top:3px;letter-spacing:.05em;}
+  .day.rest .day-label{color:var(--muted);}
+  .day-dur{font-size:9px;color:var(--muted);margin-top:2px;}
+
+  /* SET TALLY */
+  .tally{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:16px;}
+  .tally-title{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:10px;}
+  .tally-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+  .tally-row:last-of-type{border-bottom:none;}
+  .tally-muscle{color:var(--dim);}
+  .tally-sets{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--red);}
+  .tally-via{font-size:10px;color:var(--muted);font-style:italic;text-align:right;}
+  .tally-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:10px;margin-top:5px;border-top:2px solid var(--border);}
+  .tally-total-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+  .tally-total-num{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--blue);}
+
+  /* EXERCISE CARDS */
+  .exercise-list{display:flex;flex-direction:column;gap:12px;}
+  .ex-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:grid;grid-template-columns:120px 1fr;}
+  @media(max-width:460px){.ex-card{grid-template-columns:95px 1fr;}}
+  .ex-gif{background:#111;overflow:hidden;}
+  .ex-gif img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+  .ex-gif .fallback{display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:1;font-size:28px;background:#131313;}
+  .ex-body{padding:12px 14px;}
+  .ex-name{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.04em;line-height:1.15;margin-bottom:6px;}
+  .ex-muscles{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;}
+  .mc{font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;letter-spacing:.03em;}
+  .mc-p{background:rgba(82,183,136,.18);color:var(--green);border:1px solid rgba(82,183,136,.3);}
+  .mc-s{background:rgba(200,169,110,.1);color:var(--gold);border:1px solid rgba(200,169,110,.2);}
+  .ex-meta{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px;}
+  .tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:2px;letter-spacing:.06em;text-transform:uppercase;}
+  .tag-sets{background:rgba(224,92,92,.15);color:var(--red);border:1px solid rgba(224,92,92,.25);}
+  .tag-reps{background:rgba(91,155,213,.1);color:var(--blue);border:1px solid rgba(91,155,213,.2);}
+  .tag-src{background:rgba(82,183,136,.08);color:var(--green);border:1px solid rgba(82,183,136,.2);font-size:9px;}
+  .ex-tip{font-size:11px;color:var(--muted);line-height:1.55;font-weight:300;}
+  .ex-tip strong{color:#bbb;font-weight:500;}
+
+  /* HOW CARDS */
+  .how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:11px;margin-bottom:20px;}
+  .how-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:15px;}
+  .how-num{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;margin-bottom:4px;}
+  .how-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+  .how-body{font-size:11px;color:var(--muted);line-height:1.6;font-weight:300;}
+
+  .info-box{background:rgba(82,183,136,.07);border:1px solid rgba(82,183,136,.2);border-radius:6px;padding:12px 15px;font-size:12px;color:#ccc;line-height:1.65;margin-bottom:18px;}
+  .info-box strong{color:var(--green);}
+
+  .sources{font-size:10px;color:var(--muted);margin-top:18px;padding-top:12px;border-top:1px solid var(--border);line-height:1.7;}
+  .sources a{color:var(--muted);text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="wordmark"><span class="n1">2</span><span class="dot">·</span><span class="n2">5</span><span class="dot">·</span><span class="n3">15</span></div>
+  <div class="pillrow">
+    <div class="pill pill-gold"><div class="pill-num">2</div><div class="pill-text"><strong>2 Sessions/Week</strong><span>Full body each time</span></div></div>
+    <div class="pill pill-red"><div class="pill-num">5</div><div class="pill-text"><strong>5 Sets Per Muscle</strong><span>Via compounds</span></div></div>
+    <div class="pill pill-blue"><div class="pill-num">15</div><div class="pill-text"><strong>15 Set Cap</strong><span>Per session</span></div></div>
+  </div>
+</header>
+
+<nav class="nav">
+  <button class="tab active" onclick="showTab('overview',this)">Overview</button>
+  <button class="tab" onclick="showTab('session-a',this)">Session A · Mon</button>
+  <button class="tab" onclick="showTab('session-b',this)">Session B · Thu</button>
+  <button class="tab" onclick="showTab('library',this)">Swap Library</button>
+</nav>
+
+<div class="main">
+
+<!-- ══════ OVERVIEW ══════ -->
+<div id="sec-overview" class="section active">
+  <div class="sec-head">
+    <div class="sec-title">The Structure</div>
+    <div class="sec-sub">2 full-body sessions per week. Every session hits every muscle group. 15 sets total each time.</div>
+  </div>
+
+  <div class="info-box">
+    <strong>Why full-body and not splits?</strong> The "2" in 2-5-15 means each muscle is trained twice a week. A chest/back split would mean chest only gets hit on upper days. Full-body sessions ensure every muscle gets its 2× weekly stimulus — and compound movements mean 3 exercises × 5 sets = 15 sets covers the whole body simultaneously.
+  </div>
+
+  <div class="how-grid">
+    <div class="how-card"><div class="how-num" style="color:var(--gold)">2×</div><div class="how-title">Sessions Per Week</div><div class="how-body">Monday and Thursday. Each is a complete full-body workout. ~72 hrs between sessions — enough recovery, frequent enough stimulus.</div></div>
+    <div class="how-card"><div class="how-num" style="color:var(--red)">5</div><div class="how-title">Sets Per Muscle</div><div class="how-body">Each compound movement counts toward 2–3 muscle groups at once. A thruster = 5 sets for quads AND shoulders AND triceps in one go.</div></div>
+    <div class="how-card"><div class="how-num" style="color:var(--blue)">15</div><div class="how-title">Sets Per Session</div><div class="how-body">3 exercises × 5 sets = 15. With full-body compounds that's enough to hit every major muscle. Sessions take ~30–35 minutes.</div></div>
+    <div class="how-card"><div class="how-num" style="color:var(--green)">A/B</div><div class="how-title">Alternate Each Week</div><div class="how-body">Session A and B use different exercises for the same muscle groups — same stimulus, different movement pattern. This prevents accommodation over time.</div></div>
+  </div>
+
+  <div class="sec-head"><div class="sec-title" style="font-size:21px">Weekly Schedule</div></div>
+  <div class="week-grid">
+    <div class="day session-a"><div class="day-name">Mon</div><div class="day-label" style="color:var(--gold)">Session A</div><div class="day-dur">~35 min</div></div>
+    <div class="day rest"><div class="day-name">Tue</div><div class="day-label">Rest</div></div>
+    <div class="day rest"><div class="day-name">Wed</div><div class="day-label">Rest</div></div>
+    <div class="day session-b"><div class="day-name">Thu</div><div class="day-label" style="color:var(--blue)">Session B</div><div class="day-dur">~35 min</div></div>
+    <div class="day rest"><div class="day-name">Fri</div><div class="day-label">Rest</div></div>
+    <div class="day rest"><div class="day-name">Sat</div><div class="day-label">Rest</div></div>
+    <div class="day rest"><div class="day-name">Sun</div><div class="day-label">Rest</div></div>
+  </div>
+
+  <div class="info-box" style="background:rgba(91,155,213,.07);border-color:rgba(91,155,213,.2);">
+    <strong style="color:var(--blue)">Rest days:</strong> The method keeps rest simple. 3 days between sessions (Mon→Thu) means full recovery. If life gets in the way, Tue/Fri works just as well — just keep ~72 hrs between the two sessions.
+  </div>
+</div>
+
+<!-- ══════ SESSION A ══════ -->
+<div id="sec-session-a" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Session A — Monday</div>
+    <div class="sec-sub">3 full-body compounds · 5 sets each · 15 total sets · ~35 min · Rest 90 sec between sets</div>
+  </div>
+
+  <div class="tally">
+    <div class="tally-title">Muscle Coverage — how each group gets its 5 sets</div>
+    <div class="tally-row"><span class="tally-muscle">Quads / Glutes</span><span class="tally-sets">5</span><span class="tally-via">Thruster</span></div>
+    <div class="tally-row"><span class="tally-muscle">Shoulders</span><span class="tally-sets">5+5</span><span class="tally-via">Thruster + Deadlift Upright Row</span></div>
+    <div class="tally-row"><span class="tally-muscle">Hamstrings / Traps</span><span class="tally-sets">5</span><span class="tally-via">Deadlift → Upright Row</span></div>
+    <div class="tally-row"><span class="tally-muscle">Chest / Triceps</span><span class="tally-sets">5</span><span class="tally-via">Floor Press</span></div>
+    <div class="tally-row"><span class="tally-muscle">Back / Biceps / Core</span><span class="tally-sets">5</span><span class="tally-via">Floor Press (stabilise) + Renegade Row*</span></div>
+    <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/nL-oMKl3mZcAAAAC/dumbbell-thruster-squat.gif" alt="Thruster" onerror="this.outerHTML='<div class=fallback>🚀</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Thruster (Squat → Press)</div>
+        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Triceps</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8–10 reps</span><span class="tag tag-src">NASM Advanced Squat</span></div>
+        <div class="ex-tip"><strong>How:</strong> Dumbbells at shoulders. Full squat, then drive through the legs and use that momentum to press overhead in one fluid movement. NASM classifies this as the advanced functional squat pattern. Covers lower body AND shoulders in every rep — the single highest-value movement in this programme.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/GNydO9TlZ0MAAAAC/dumbbell-romanian-deadlift.gif" alt="Deadlift Upright Row" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Deadlift → Upright Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Lower Back</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8–10 reps</span><span class="tag tag-src">Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>How:</strong> Hinge into a Romanian deadlift — then as you stand, pull the dumbbells straight up to chin height (upright row). Two movements chained. The hinge fires the entire posterior chain; the row hits traps and side delts. Fitness Phantom lists this as one of the highest muscle-coverage combos available with dumbbells.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/5ZzYOt3fWQcAAAAC/dumbbell-floor-press-floor-press.gif" alt="Floor Press" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Floor Press</div>
+        <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Shoulders (front)</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8–10 reps</span></div>
+        <div class="ex-tip"><strong>How:</strong> Lie flat on the mat, elbows at 45°, lower until triceps touch the floor. The mat limits the range of motion which actually removes shoulder strain — no bench needed. Go heavy. This is your primary push compound, covering chest and triceps for the session.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;">* <em>Back and biceps receive secondary stimulus through stabilisation during the floor press and via the hinge/row movements. If you want dedicated back volume, swap the Floor Press for the Renegade Row from the Swap Library and use the Glute Bridge + Chest Fly as your push instead.</em></p>
+</div>
+
+<!-- ══════ SESSION B ══════ -->
+<div id="sec-session-b" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Session B — Thursday</div>
+    <div class="sec-sub">Different movement patterns, same muscles · 5 sets each · 15 total sets · ~35 min · Rest 90 sec between sets</div>
+  </div>
+
+  <div class="tally">
+    <div class="tally-title">Muscle Coverage — how each group gets its 5 sets</div>
+    <div class="tally-row"><span class="tally-muscle">Quads / Glutes</span><span class="tally-sets">5</span><span class="tally-via">Reverse Lunge → Curl</span></div>
+    <div class="tally-row"><span class="tally-muscle">Biceps</span><span class="tally-sets">5</span><span class="tally-via">Reverse Lunge → Curl</span></div>
+    <div class="tally-row"><span class="tally-muscle">Hamstrings / Back</span><span class="tally-sets">5</span><span class="tally-via">Single-Leg RDL → Row</span></div>
+    <div class="tally-row"><span class="tally-muscle">Chest / Triceps / Obliques</span><span class="tally-sets">5</span><span class="tally-via">Push-Up to T Rotation</span></div>
+    <div class="tally-row"><span class="tally-muscle">Shoulders (all heads)</span><span class="tally-sets">5</span><span class="tally-via">Arnold Press (add-on, see note)</span></div>
+    <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/Oc_cKIYNXcQAAAAC/dumbbell-reverse-lunge.gif" alt="Lunge to Curl" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Reverse Lunge → Bicep Curl</div>
+        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Biceps</span><span class="mc mc-s">Core (balance)</span><span class="mc mc-s">Hamstrings</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8 reps each leg</span><span class="tag tag-src">Fitness Phantom + NASM Lunge</span></div>
+        <div class="ex-tip"><strong>How:</strong> Step back into a reverse lunge — as you drive back up to standing, curl the dumbbells. Reverse lunge (vs forward) is easier on the knee and better activates the glute. The curl happens at the top of the stand, using the natural momentum pause. Covers quads, glutes AND biceps per set.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/7bqFRhXK6ZAAAAAC/single-leg-romanian-deadlift.gif" alt="SL RDL Row" onerror="this.outerHTML='<div class=fallback>⚖️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Single-Leg RDL → Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Back</span><span class="mc mc-s">Core (balance)</span><span class="mc mc-s">Biceps</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8 reps each leg</span><span class="tag tag-src">NASM Advanced Hinge + NML</span></div>
+        <div class="ex-tip"><strong>How:</strong> Balance on one leg, hinge forward into a single-leg RDL — at the bottom, row the dumbbell to your hip before returning upright. NASM lists single-leg RDL as the advanced hinge pattern. Adding the row means each rep also hits the back. Go lighter than a standard RDL — balance is the challenge here.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/oBhSnwukFMEAAAAC/push-up-exercise.gif" alt="Push Up Rotation" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Push-Up → T Rotation</div>
+        <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 reps each side</span><span class="tag tag-src">NASM Advanced Push</span></div>
+        <div class="ex-tip"><strong>How:</strong> Do a push-up, then at the top rotate and reach one arm to the ceiling until your body forms a "T". Alternate the rotation side each rep. NASM lists this as their advanced functional push pattern — the rotation adds an oblique and rotational core element completely absent from the floor press in Session A. Load with a dumbbell on your back to increase difficulty.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Shoulders receive secondary stimulus from both the lunge-press and push-up. If you want dedicated shoulder sets, replace the Push-Up → T Rotation with the Arnold Press from the Swap Library (5 sets) — that brings dedicated shoulder volume while still covering triceps.</em></p>
+</div>
+
+<!-- ══════ SWAP LIBRARY ══════ -->
+<div id="sec-library" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Swap Library</div>
+    <div class="sec-sub">Rotate any exercise after 4–6 weeks. Each covers the same muscle groups as what it replaces.</div>
+  </div>
+
+  <div class="info-box">
+    <strong>When to swap:</strong> After 4–6 weeks your body adapts to the same movement pattern. Swapping in an alternative — same muscle groups, different pattern — restarts the adaptation cycle. You don't need to change everything at once; swapping one exercise per session is enough.
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/k_DcXzRwVBEAAAAC/dumbbell-thruster.gif" alt="Clean Press" onerror="this.outerHTML='<div class=fallback>⚡</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Clean and Press</div>
+        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Glutes</span><span class="mc mc-s">Triceps</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 reps</span><span class="tag tag-src">Runstreet / Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Deadlift → Upright Row (Session A). More explosive — hinge hard, pull dumbbells to shoulders (the "clean"), then press overhead. Adds a power element missing from the RDL→row.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/V2p1tJ0mxroAAAAC/renegade-row.gif" alt="Renegade Row" onerror="this.outerHTML='<div class=fallback>⚓</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Renegade Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Back</span><span class="mc mc-p">Biceps</span><span class="mc mc-p">Core</span><span class="mc mc-s">Chest (stabilise)</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 each side</span><span class="tag tag-src">NASM Advanced Pull</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Floor Press (Session A) if you want to prioritise back over chest. Or add after the 3 main exercises as a 4th movement by reducing all sets to 4 (4×4 = 16, still close to cap). NASM's advanced pull-pattern functional move.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/sFW04UrxWIwAAAAC/hip-thrust-dumbbell.gif" alt="Bridge Fly" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Glute Bridge + Chest Fly</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Chest</span><span class="mc mc-s">Hamstrings</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Floor Press (Session A or B). Drive hips up into a glute bridge, hold that position and perform a dumbbell chest fly. Lower body stays loaded the entire set. Entirely floor-based — one of the best mat-only upper/lower combos.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/E8RtJPQWxPkAAAAC/dumbbell-tricep-extension.gif" alt="Bridge Skull Crusher" onerror="this.outerHTML='<div class=fallback>💀</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Glute Bridge + Skull Crusher</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">NML</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Push-Up → T Rotation (Session B) when you want tricep isolation alongside glute work. Hold the bridge, lower dumbbells to temples, press back. NML programme this specifically as a glute + tricep compound — both muscles loaded simultaneously throughout.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/UHpPvMCMn1UAAAAC/seated-dumbbell-press.gif" alt="Arnold Press" onerror="this.outerHTML='<div class=fallback>🌀</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Arnold Press</div>
+        <div class="ex-muscles"><span class="mc mc-p">Shoulders (all 3 heads)</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Upper Chest</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Any press in either session when shoulders need more direct attention. Sit cross-legged on the mat. Start palms facing you, rotate to palms facing forward as you press overhead. The rotation recruits all three delt heads — front, side, and rear — in one movement.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/yUqlMYQqKcMAAAAC/dumbbell-goblet-squat.gif" alt="Surrender" onerror="this.outerHTML='<div class=fallback>🙏</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Surrender</div>
+        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Core</span><span class="mc mc-s">Hip Flexors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 each side</span><span class="tag tag-src">Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Thruster (Session A) for variety. Hold dumbbells overhead throughout. Step one knee down to the mat, then the other (kneeling), then step back up. The overhead load challenges core stability and shoulders the entire time. Trains the transition between floor and standing — highly functional.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://media.tenor.com/bPPWOZvRiisAAAAC/dumbbell-split-squat.gif" alt="Curtsy Lunge Rotation" onerror="this.outerHTML='<div class=fallback>💃</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Curtsy Lunge + Rotation</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes (medius)</span><span class="mc mc-p">Quads</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Adductors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8 each side</span><span class="tag tag-src">NASM Advanced Lunge</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Reverse Lunge → Curl (Session B). Cross one leg behind into a curtsy, rotate torso toward the front leg at the bottom, then rotate back and stand. NASM's advanced lunge pattern — the only movement that trains the frontal and rotational plane, which all other exercises in this programme miss.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sources">
+    Sources: <a href="https://blog.nasm.org/functional-training-compound-workouts" target="_blank">NASM — Functional Training: Compound Workouts</a> · <a href="https://thefitnessphantom.com/dumbbell-compound-exercises" target="_blank">Fitness Phantom — 25 Best Dumbbell Compound Exercises</a> · <a href="https://www.nourishmovelove.com/full-body-compound-exercises/" target="_blank">NML — 9 Best Compound Exercises</a> · <a href="https://www.runstreet.com/blog/compound-exercises-with-dumbbells" target="_blank">Runstreet — Top 10 Compound Dumbbell Exercises</a>
+  </div>
+</div>
+
+</div>
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
