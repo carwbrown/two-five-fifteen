@@ -143,6 +143,14 @@
   .mobility-list li:last-child{border-bottom:none;}
   .ml-name{color:var(--white);font-weight:500;}
   .ml-dur{color:var(--muted);flex-shrink:0;font-size:11px;}
+
+  /* SHRINKING HEADER ON SCROLL */
+  .header{transition:padding .25s ease;}
+  .wordmark{transition:font-size .25s ease;}
+  .pillrow{max-height:80px;overflow:hidden;transition:max-height .3s ease,opacity .25s ease,margin-top .25s ease;}
+  .sticky-top.scrolled .header{padding:8px 22px 6px;}
+  .sticky-top.scrolled .wordmark{font-size:28px;}
+  .sticky-top.scrolled .pillrow{max-height:0;opacity:0;margin-top:0;}
 </style>
 </head>
 <body>
@@ -852,6 +860,10 @@
 
 </div>
 <script>
+window.addEventListener('scroll', function() {
+  document.querySelector('.sticky-top').classList.toggle('scrolled', window.scrollY > 50);
+});
+
 function showTab(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
