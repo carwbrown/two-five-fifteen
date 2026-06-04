@@ -10,12 +10,15 @@
     --bg:#0d0d0d; --surface:#161616; --card:#1c1c1c; --border:#2c2c2c;
     --white:#f0ede8; --muted:#777; --dim:#aaa;
     --gold:#c8a96e; --red:#e05c5c; --blue:#5b9bd5; --green:#52b788;
+    --teal:#3fd0c9;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;}
 
   /* HEADER */
-  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:26px 22px 18px;position:sticky;top:0;z-index:100;}
+  .sticky-top{position:sticky;top:0;z-index:100;}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:26px 22px 18px;}
+  .header-top{display:flex;align-items:flex-end;gap:14px;}
   .wordmark{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,10vw,72px);line-height:1;letter-spacing:.06em;display:flex;align-items:baseline;gap:.04em;}
   .wordmark .n1{color:var(--gold);} .wordmark .dot{color:#333;font-size:.55em;} .wordmark .n2{color:var(--red);} .wordmark .n3{color:var(--blue);}
   .pillrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
@@ -23,10 +26,18 @@
   .pill-gold{background:rgba(200,169,110,.12);border:1px solid rgba(200,169,110,.3);}
   .pill-red{background:rgba(224,92,92,.12);border:1px solid rgba(224,92,92,.3);}
   .pill-blue{background:rgba(91,155,213,.12);border:1px solid rgba(91,155,213,.3);}
+  .pill-coral{background:rgba(63,208,201,.12);border:1px solid rgba(63,208,201,.3);}
   .pill-num{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;}
-  .pill-gold .pill-num{color:var(--gold);} .pill-red .pill-num{color:var(--red);} .pill-blue .pill-num{color:var(--blue);}
+  .pill-gold .pill-num{color:var(--gold);} .pill-red .pill-num{color:var(--red);} .pill-blue .pill-num{color:var(--blue);} .pill-coral .pill-num{color:var(--teal);}
   .pill-text strong{display:block;font-size:12px;font-weight:700;color:var(--white);}
   .pill-text span{font-size:11px;color:var(--muted);}
+
+  /* PROGRAM SWITCHER */
+  .prog-switch{display:flex;gap:4px;align-items:center;padding-bottom:6px;}
+  .prog-btn{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;padding:4px 10px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:all .15s;}
+  .prog-btn:hover{color:var(--dim);border-color:#444;}
+  .prog-btn.active[data-prog="2515"]{background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4);color:var(--gold);}
+  .prog-btn.active[data-prog="ssc"]{background:rgba(63,208,201,.15);border-color:rgba(63,208,201,.4);color:var(--teal);}
 
   /* NAV */
   .nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 18px;display:flex;overflow-x:auto;scrollbar-width:none;}
@@ -34,6 +45,8 @@
   .tab{padding:12px 20px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;white-space:nowrap;transition:color .15s,border-color .15s;}
   .tab:hover{color:var(--dim);}
   .tab.active{color:var(--white);border-bottom-color:var(--gold);}
+  body.ssc-mode .tab.active{border-bottom-color:var(--teal);}
+  body.ssc-mode{--bg:#020d14;--surface:#06192a;--card:#0b2236;--border:#16384f;}
 
   /* LAYOUT */
   .main{padding:18px;max-width:860px;margin:0 auto;}
@@ -44,11 +57,17 @@
 
   /* WEEK DISPLAY */
   .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:20px;}
-  @media(max-width:500px){.week-grid{grid-template-columns:repeat(4,1fr);}}
+  @media(max-width:500px){.week-grid{grid-template-columns:repeat(4,1fr);}.pillrow{display:none;}}
   .day{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:9px 5px;text-align:center;}
   .day.rest{opacity:.35;}
   .day.session-a{border-top:2px solid var(--gold);}
   .day.session-b{border-top:2px solid var(--blue);}
+  .day.ssc-upper{border-top:2px solid var(--teal);}
+  .day.ssc-lower{border-top:2px solid #2eaf7d;}
+  .day.ssc-walk{border-top:2px solid #449342;}
+  .day.ssc-full{border-top:2px solid var(--teal);}
+  .day.ssc-opt{border-top:2px solid rgba(63,208,201,.4);opacity:.6;}
+  .day.ssc-mob{border-top:2px solid var(--gold);opacity:.65;}
   .day-name{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
   .day-label{font-family:'Bebas Neue',sans-serif;font-size:13px;margin-top:3px;letter-spacing:.05em;}
   .day.rest .day-label{color:var(--muted);}
@@ -96,28 +115,75 @@
 
   .info-box{background:rgba(82,183,136,.07);border:1px solid rgba(82,183,136,.2);border-radius:6px;padding:12px 15px;font-size:12px;color:#ccc;line-height:1.65;margin-bottom:18px;}
   .info-box strong{color:var(--green);}
+  .info-box.coral-box{background:rgba(63,208,201,.07);border-color:rgba(63,208,201,.2);}
+  .info-box.coral-box strong{color:var(--teal);}
 
   .sources{font-size:10px;color:var(--muted);margin-top:18px;padding-top:12px;border-top:1px solid var(--border);line-height:1.7;}
   .sources a{color:var(--muted);text-decoration:underline;}
+
+  /* CIRCUIT BLOCKS */
+  .circuit-block{background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:10px;overflow:hidden;}
+  .circuit-head{background:rgba(63,208,201,.08);border-bottom:1px solid rgba(63,208,201,.15);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+  .circuit-head-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.06em;color:var(--teal);}
+  .circuit-head-rep{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);}
+  .circuit-list{list-style:none;padding:6px 14px;}
+  .circuit-list li{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);gap:8px;}
+  .circuit-list li:last-child{border-bottom:none;}
+  .cl-name{font-size:12px;color:var(--white);font-weight:500;flex:1;}
+  .cl-mod{font-size:10px;color:var(--muted);font-style:italic;display:block;margin-top:2px;}
+  .cl-reps{font-size:11px;color:var(--muted);flex-shrink:0;text-align:right;padding-top:1px;}
+  .rest-note{font-size:11px;color:var(--muted);font-style:italic;margin-bottom:14px;}
+
+  /* MOBILITY LIST */
+  .mobility-block{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:10px;}
+  .mobility-head{background:rgba(200,169,110,.08);border-bottom:1px solid rgba(200,169,110,.15);padding:10px 14px;}
+  .mobility-head-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.06em;color:var(--gold);}
+  .mobility-list{list-style:none;padding:6px 14px;}
+  .mobility-list li{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--border);gap:8px;font-size:12px;}
+  .mobility-list li:last-child{border-bottom:none;}
+  .ml-name{color:var(--white);font-weight:500;}
+  .ml-dur{color:var(--muted);flex-shrink:0;font-size:11px;}
 </style>
 </head>
 <body>
 
+<div class="sticky-top">
 <header class="header">
-  <div class="wordmark"><span class="n1">2</span><span class="dot">·</span><span class="n2">5</span><span class="dot">·</span><span class="n3">15</span></div>
-  <div class="pillrow">
+  <div class="header-top">
+    <div class="wordmark"><span class="n1">2</span><span class="dot">·</span><span class="n2">5</span><span class="dot">·</span><span class="n3">15</span></div>
+    <div class="prog-switch">
+      <button class="prog-btn active" data-prog="2515" onclick="switchProgram('2515',this)">2·5·15</button>
+      <button class="prog-btn" data-prog="ssc" onclick="switchProgram('ssc',this)">SSC</button>
+    </div>
+  </div>
+  <div id="pills-2515" class="pillrow">
     <div class="pill pill-gold"><div class="pill-num">2</div><div class="pill-text"><strong>2 Sessions/Week</strong><span>Full body each time</span></div></div>
     <div class="pill pill-red"><div class="pill-num">5</div><div class="pill-text"><strong>5 Sets Per Muscle</strong><span>Via compounds</span></div></div>
     <div class="pill pill-blue"><div class="pill-num">15</div><div class="pill-text"><strong>15 Set Cap</strong><span>Per session</span></div></div>
   </div>
+  <div id="pills-ssc" class="pillrow" style="display:none">
+    <div class="pill pill-coral"><div class="pill-num">5</div><div class="pill-text"><strong>5 Active Days</strong><span>Mon / Tue / Thu + optional</span></div></div>
+    <div class="pill pill-coral"><div class="pill-num">25</div><div class="pill-text"><strong>25 Min Sessions</strong><span>Circuit training</span></div></div>
+    <div class="pill pill-coral"><div class="pill-num">4</div><div class="pill-text"><strong>4 Circuits</strong><span>Per workout day</span></div></div>
+  </div>
 </header>
 
-<nav class="nav">
+<nav id="nav-2515" class="nav">
   <button class="tab active" onclick="showTab('overview',this)">Overview</button>
   <button class="tab" onclick="showTab('session-a',this)">Session A · Mon</button>
   <button class="tab" onclick="showTab('session-b',this)">Session B · Thu</button>
+  <button class="tab" onclick="showTab('session-c',this)">Session C · Core</button>
   <button class="tab" onclick="showTab('library',this)">Swap Library</button>
 </nav>
+<nav id="nav-ssc" class="nav" style="display:none">
+  <button class="tab active" onclick="showTab('ssc-overview',this)">Overview</button>
+  <button class="tab" onclick="showTab('ssc-monday',this)">Monday · Upper</button>
+  <button class="tab" onclick="showTab('ssc-tuesday',this)">Tuesday · Lower</button>
+  <button class="tab" onclick="showTab('ssc-thursday',this)">Thursday · Full</button>
+  <button class="tab" onclick="showTab('ssc-saturday',this)">Saturday · Full</button>
+  <button class="tab" onclick="showTab('ssc-mobility',this)">Mobility</button>
+</nav>
+</div>
 
 <div class="main">
 
@@ -168,14 +234,14 @@
     <div class="tally-row"><span class="tally-muscle">Shoulders</span><span class="tally-sets">5+5</span><span class="tally-via">Thruster + Deadlift Upright Row</span></div>
     <div class="tally-row"><span class="tally-muscle">Hamstrings / Traps</span><span class="tally-sets">5</span><span class="tally-via">Deadlift → Upright Row</span></div>
     <div class="tally-row"><span class="tally-muscle">Chest / Triceps</span><span class="tally-sets">5</span><span class="tally-via">Floor Press</span></div>
-    <div class="tally-row"><span class="tally-muscle">Back / Biceps / Core</span><span class="tally-sets">5</span><span class="tally-via">Floor Press (stabilise) + Renegade Row*</span></div>
+    <div class="tally-row"><span class="tally-muscle">Back / Biceps / Core</span><span class="tally-sets">5</span><span class="tally-via">Floor Press (stabilise) + hinge/row movements</span></div>
     <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
   </div>
 
   <div class="exercise-list">
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/nL-oMKl3mZcAAAAC/dumbbell-thruster-squat.gif" alt="Thruster" onerror="this.outerHTML='<div class=fallback>🚀</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/0/8/9/4/20894.gif" alt="Thruster" onerror="this.outerHTML='<div class=fallback>🚀</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">DB Thruster (Squat → Press)</div>
         <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Triceps</span><span class="mc mc-s">Core</span></div>
@@ -185,7 +251,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/GNydO9TlZ0MAAAAC/dumbbell-romanian-deadlift.gif" alt="Deadlift Upright Row" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/4/9/4/2/24942.gif" alt="Deadlift Upright Row" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Deadlift → Upright Row</div>
         <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Lower Back</span></div>
@@ -195,7 +261,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/5ZzYOt3fWQcAAAAC/dumbbell-floor-press-floor-press.gif" alt="Floor Press" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/9/1/6/16916.gif" alt="Floor Press" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">DB Floor Press</div>
         <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Shoulders (front)</span></div>
@@ -206,7 +272,7 @@
 
   </div>
 
-  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;">* <em>Back and biceps receive secondary stimulus through stabilisation during the floor press and via the hinge/row movements. If you want dedicated back volume, swap the Floor Press for the Renegade Row from the Swap Library and use the Glute Bridge + Chest Fly as your push instead.</em></p>
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Back and biceps receive secondary stimulus through stabilisation during the floor press and via the hinge/row movements. For dedicated back volume, swap the Floor Press for the Glute Bridge + Chest Fly from the Swap Library and add a bent-over row as your pull.</em></p>
 </div>
 
 <!-- ══════ SESSION B ══════ -->
@@ -229,7 +295,7 @@
   <div class="exercise-list">
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/Oc_cKIYNXcQAAAAC/dumbbell-reverse-lunge.gif" alt="Lunge to Curl" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/3/2/4/5/2/32452.gif" alt="Lunge to Curl" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Reverse Lunge → Bicep Curl</div>
         <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Biceps</span><span class="mc mc-s">Core (balance)</span><span class="mc mc-s">Hamstrings</span></div>
@@ -239,7 +305,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/7bqFRhXK6ZAAAAAC/single-leg-romanian-deadlift.gif" alt="SL RDL Row" onerror="this.outerHTML='<div class=fallback>⚖️</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/0/3/1/0/20310.gif" alt="SL RDL Row" onerror="this.outerHTML='<div class=fallback>⚖️</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Single-Leg RDL → Row</div>
         <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Back</span><span class="mc mc-s">Core (balance)</span><span class="mc mc-s">Biceps</span></div>
@@ -249,7 +315,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/oBhSnwukFMEAAAAC/push-up-exercise.gif" alt="Push Up Rotation" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
+      <div class="ex-gif"><img src="https://tenor.com/bPuTM.gif" alt="Push Up Rotation" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Push-Up → T Rotation</div>
         <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
@@ -261,6 +327,64 @@
   </div>
 
   <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Shoulders receive secondary stimulus from both the lunge-press and push-up. If you want dedicated shoulder sets, replace the Push-Up → T Rotation with the Arnold Press from the Swap Library (5 sets) — that brings dedicated shoulder volume while still covering triceps.</em></p>
+</div>
+
+<!-- ══════ SESSION C ══════ -->
+<div id="sec-session-c" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Session C — Core</div>
+    <div class="sec-sub">Optional add-on · Hits every core muscle · 5 sets each · 15 total sets · ~25 min · Rest 60 sec between sets</div>
+  </div>
+
+  <div class="info-box" style="background:rgba(82,183,136,.07);border-color:rgba(82,183,136,.2);">
+    <strong>Why these 3?</strong> The ACE EMG study ranked bicycle crunch #1 for oblique activation (248% above a standard crunch) and #1 for rectus abdominis. Dead bug is the gold-standard for the deep transverse abdominis. Plank pass-through is the only movement here that meaningfully loads the serratus anterior and trains pure anti-rotation under dumbbell load. Together they cover every core muscle.
+  </div>
+
+  <div class="tally">
+    <div class="tally-title">Muscle Coverage — how each group gets its sets</div>
+    <div class="tally-row"><span class="tally-muscle">Rectus Abdominis</span><span class="tally-sets">5+5</span><span class="tally-via">Dead Bug + Bicycle Crunch</span></div>
+    <div class="tally-row"><span class="tally-muscle">Obliques (ext + int)</span><span class="tally-sets">5+5</span><span class="tally-via">Bicycle Crunch + Plank Pass-Through</span></div>
+    <div class="tally-row"><span class="tally-muscle">Transverse Abdominis</span><span class="tally-sets">5+5</span><span class="tally-via">Dead Bug + Plank Pass-Through</span></div>
+    <div class="tally-row"><span class="tally-muscle">Hip Flexors</span><span class="tally-sets">5+5</span><span class="tally-via">Dead Bug + Bicycle Crunch</span></div>
+    <div class="tally-row"><span class="tally-muscle">Serratus Anterior</span><span class="tally-sets">5</span><span class="tally-via">Plank Pass-Through</span></div>
+    <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/8/6/0/8/18608.gif" alt="Weighted Dead Bug" onerror="this.outerHTML='<div class=fallback>🐛</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Weighted Dead Bug</div>
+        <div class="ex-muscles"><span class="mc mc-p">Transverse Abs</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-p">Hip Flexors</span><span class="mc mc-s">Obliques</span><span class="mc mc-s">Erector Spinae</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8–10 each side</span><span class="tag tag-src">NASM / ACE Research</span></div>
+        <div class="ex-tip"><strong>How:</strong> Lie on your back, hold a dumbbell at chest with both hands, arms extended toward the ceiling. Lower opposite arm and leg toward the floor simultaneously — keep your lower back pressed completely flat the whole time. The DB adds load that forces the deep transverse abdominis to brace far harder than bodyweight alone. The lowering phase is where the work happens — go slow.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/7/6/6/2/27662.gif" alt="Bicycle Crunch" onerror="this.outerHTML='<div class=fallback>🚲</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Bicycle Crunch</div>
+        <div class="ex-muscles"><span class="mc mc-p">Obliques</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-p">Hip Flexors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">20–25 reps</span><span class="tag tag-src">ACE Study — Ranked #1</span></div>
+        <div class="ex-tip"><strong>How:</strong> Hands lightly behind head, rotate one elbow toward the opposite knee while extending the other leg low and straight — then switch. The ACE landmark EMG study ranked this #1 for both oblique activation (248% above a standard crunch) and rectus abdominis. Reps are higher here because it's bodyweight — go slow and focus on the rotation, not the speed. Don't pull your neck.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/4/2/5/6/24256.gif" alt="DB Plank Pass-Through" onerror="this.outerHTML='<div class=fallback>➡️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Plank Pass-Through</div>
+        <div class="ex-muscles"><span class="mc mc-p">Transverse Abs</span><span class="mc mc-p">Obliques</span><span class="mc mc-p">Serratus Anterior</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Hip Flexors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8–10 each side</span><span class="tag tag-src">NASM Anti-Rotation</span></div>
+        <div class="ex-tip"><strong>How:</strong> High plank position with a dumbbell on one side. Reach under with the opposite hand and drag the dumbbell across to the other side, then alternate. The goal is to keep your hips dead still as you move the weight — that anti-rotation resistance is pure oblique and TA work. Set your feet wider than shoulder width for extra stability. Go lighter than you think.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Session C is an optional add-on — fit it in on any non-consecutive day. Wed or Sat work well alongside the Mon/Thu schedule. Rest 60 sec between sets rather than 90 — core exercises recover faster than compound lifts.</em></p>
 </div>
 
 <!-- ══════ SWAP LIBRARY ══════ -->
@@ -277,7 +401,7 @@
   <div class="exercise-list">
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/k_DcXzRwVBEAAAAC/dumbbell-thruster.gif" alt="Clean Press" onerror="this.outerHTML='<div class=fallback>⚡</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/2/6/2/0/22620.gif" alt="Clean Press" onerror="this.outerHTML='<div class=fallback>⚡</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Clean and Press</div>
         <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Glutes</span><span class="mc mc-s">Triceps</span></div>
@@ -287,17 +411,27 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/V2p1tJ0mxroAAAAC/renegade-row.gif" alt="Renegade Row" onerror="this.outerHTML='<div class=fallback>⚓</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/7/3/5/0/27350.gif" alt="DB Snatch" onerror="this.outerHTML='<div class=fallback>⚡</div>'"></div>
       <div class="ex-body">
-        <div class="ex-name">Renegade Row</div>
-        <div class="ex-muscles"><span class="mc mc-p">Back</span><span class="mc mc-p">Biceps</span><span class="mc mc-p">Core</span><span class="mc mc-s">Chest (stabilise)</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 each side</span><span class="tag tag-src">NASM Advanced Pull</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Floor Press (Session A) if you want to prioritise back over chest. Or add after the 3 main exercises as a 4th movement by reducing all sets to 4 (4×4 = 16, still close to cap). NASM's advanced pull-pattern functional move.</div>
+        <div class="ex-name">DB Snatch</div>
+        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 each side</span><span class="tag tag-src">Tom's Guide</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Deadlift → Upright Row (Session A) for a more explosive variant. Hinge down, then drive the hips hard and pull the dumbbell straight overhead in one fluid motion — no pause at the shoulder. The most full-body power movement in the dumbbell toolkit. Alternate arms each set.</div>
       </div>
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/sFW04UrxWIwAAAAC/hip-thrust-dumbbell.gif" alt="Bridge Fly" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/1/8/5/0/21850.gif" alt="Lateral Lunge Row" onerror="this.outerHTML='<div class=fallback>↔️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Lateral Lunge + Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes (medius)</span><span class="mc mc-p">Adductors</span><span class="mc mc-p">Back</span><span class="mc mc-s">Quads</span><span class="mc mc-s">Biceps</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8 each side</span><span class="tag tag-src">Tom's Guide</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Reverse Lunge → Curl (Session B) for a frontal-plane variant. Step wide to one side, sink into the lunge — at the bottom pull that same-side dumbbell to your hip, then stand and repeat on the other side. The only movement in the programme that trains the frontal plane, and it doubles as a back compound.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/4/0/16840.gif" alt="Bridge Fly" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Glute Bridge + Chest Fly</div>
         <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Chest</span><span class="mc mc-s">Hamstrings</span><span class="mc mc-s">Core</span></div>
@@ -307,7 +441,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/E8RtJPQWxPkAAAAC/dumbbell-tricep-extension.gif" alt="Bridge Skull Crusher" onerror="this.outerHTML='<div class=fallback>💀</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/1/5/4/3/21543.gif" alt="Bridge Skull Crusher" onerror="this.outerHTML='<div class=fallback>💀</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Glute Bridge + Skull Crusher</div>
         <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Core</span></div>
@@ -317,7 +451,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/UHpPvMCMn1UAAAAC/seated-dumbbell-press.gif" alt="Arnold Press" onerror="this.outerHTML='<div class=fallback>🌀</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/8/7/3/9/8739.gif" alt="Arnold Press" onerror="this.outerHTML='<div class=fallback>🌀</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Arnold Press</div>
         <div class="ex-muscles"><span class="mc mc-p">Shoulders (all 3 heads)</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Upper Chest</span></div>
@@ -327,7 +461,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/yUqlMYQqKcMAAAAC/dumbbell-goblet-squat.gif" alt="Surrender" onerror="this.outerHTML='<div class=fallback>🙏</div>'"></div>
+      <div class="ex-gif"><div class="fallback" style="font-size:11px;color:var(--muted);padding:10px;text-align:center;line-height:1.5;">Dumbbells overhead → kneel one leg → kneel other leg → stand back up</div></div>
       <div class="ex-body">
         <div class="ex-name">DB Surrender</div>
         <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Core</span><span class="mc mc-s">Hip Flexors</span></div>
@@ -337,7 +471,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://media.tenor.com/bPPWOZvRiisAAAAC/dumbbell-split-squat.gif" alt="Curtsy Lunge Rotation" onerror="this.outerHTML='<div class=fallback>💃</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/9/4/5/16945.gif" alt="Curtsy Lunge Rotation" onerror="this.outerHTML='<div class=fallback>💃</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Curtsy Lunge + Rotation</div>
         <div class="ex-muscles"><span class="mc mc-p">Glutes (medius)</span><span class="mc mc-p">Quads</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Adductors</span></div>
@@ -348,18 +482,396 @@
 
   </div>
 
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/6/3/16863.gif" alt="DB Russian Twist" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Russian Twist</div>
+        <div class="ex-muscles"><span class="mc mc-p">Obliques</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-s">Hip Flexors</span><span class="mc mc-s">Lower Back</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">16–20 reps</span><span class="tag tag-src">Session C Swap</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Bicycle Crunch (Session C). Sit with knees bent and feet lifted, hold one dumbbell with both hands, rotate side to side touching the DB to the floor each rep. Feet off the floor raises the difficulty significantly. Goes heavier than bicycle crunch can — good when you want loaded oblique work over bodyweight volume.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/5/8/5/9/5859.gif" alt="Double Leg Lower" onerror="this.outerHTML='<div class=fallback>📐</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Double Leg Lower</div>
+        <div class="ex-muscles"><span class="mc mc-p">Rectus Abdominis (lower)</span><span class="mc mc-p">Hip Flexors</span><span class="mc mc-s">Transverse Abs</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Session C Swap</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Weighted Dead Bug (Session C) when you want to isolate the lower rectus abdominis. Lie flat, legs raised to 90° — slowly lower both legs together toward the floor without letting your lower back arch, then raise them back. Stop before your back lifts. Harder than it looks. Add a dumbbell between your feet to increase load.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/3/8/1/5/8/38158.gif" alt="Plank Knee Tuck" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Plank Knee Tuck</div>
+        <div class="ex-muscles"><span class="mc mc-p">Transverse Abs</span><span class="mc mc-p">Hip Flexors</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-s">Obliques</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 each side</span><span class="tag tag-src">Session C Swap</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> DB Plank Pass-Through (Session C) for a more hip-flexor-focused variation. From a high plank, drive one knee toward the same-side elbow, hold a beat, then return. Alternate sides. Keeps the anti-extension plank position while adding a dynamic hip flexor contraction — less anti-rotation than the pass-through, more hip flexor and lower RA.</div>
+      </div>
+    </div>
+
   <div class="sources">
     Sources: <a href="https://blog.nasm.org/functional-training-compound-workouts" target="_blank">NASM — Functional Training: Compound Workouts</a> · <a href="https://thefitnessphantom.com/dumbbell-compound-exercises" target="_blank">Fitness Phantom — 25 Best Dumbbell Compound Exercises</a> · <a href="https://www.nourishmovelove.com/full-body-compound-exercises/" target="_blank">NML — 9 Best Compound Exercises</a> · <a href="https://www.runstreet.com/blog/compound-exercises-with-dumbbells" target="_blank">Runstreet — Top 10 Compound Dumbbell Exercises</a>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════ -->
+<!-- ══════ SSC SECTIONS ══════════════════════ -->
+<!-- ══════════════════════════════════════════ -->
+
+<!-- ══════ SSC OVERVIEW ══════ -->
+<div id="sec-ssc-overview" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Simply Strong Collective</div>
+    <div class="sec-sub">5-day program · Upper, Lower &amp; Full Body circuits · ~25 min per session · 1 min rest between circuits</div>
+  </div>
+
+  <div class="info-box coral-box">
+    <strong>How the week works:</strong> Three dedicated strength days (Mon/Tue/Thu) cover upper body, lower body, and full body. Wednesday and Friday are brisk walk or cardio days. Saturday adds an optional full-body session. Sunday is an optional mobility flow for recovery.
+  </div>
+
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num" style="color:var(--teal)">3+</div>
+      <div class="how-title">Strength Days</div>
+      <div class="how-body">Mon (Upper), Tue (Lower), Thu (Full Body). Saturday adds an optional bonus full-body session for extra volume.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num" style="color:var(--teal)">4</div>
+      <div class="how-title">Circuits Per Day</div>
+      <div class="how-body">Circuits 1–3 repeat 3 times. Circuit 4 repeats 2 times. Rest 1 minute between each circuit round.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num" style="color:#2eaf7d">2×</div>
+      <div class="how-title">Walk Days</div>
+      <div class="how-body">Wednesday and Friday: 20–30 min power walk or cardio. Maintain steady-state 130–150 BPM throughout.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num" style="color:var(--gold)">Sun</div>
+      <div class="how-title">Mobility Flow</div>
+      <div class="how-body">Optional Sunday recovery. Slow holds of 30–60 seconds each to release tension from the week.</div>
+    </div>
+  </div>
+
+  <div class="sec-head"><div class="sec-title" style="font-size:21px">Weekly Schedule</div></div>
+  <div class="week-grid">
+    <div class="day ssc-upper"><div class="day-name">Mon</div><div class="day-label" style="color:var(--teal)">Upper</div><div class="day-dur">~25 min</div></div>
+    <div class="day ssc-lower"><div class="day-name">Tue</div><div class="day-label" style="color:#2eaf7d">Lower</div><div class="day-dur">~25 min</div></div>
+    <div class="day ssc-walk"><div class="day-name">Wed</div><div class="day-label" style="color:#449342">Walk</div><div class="day-dur">20–30 min</div></div>
+    <div class="day ssc-full"><div class="day-name">Thu</div><div class="day-label" style="color:var(--teal)">Full Body</div><div class="day-dur">~25 min</div></div>
+    <div class="day ssc-walk"><div class="day-name">Fri</div><div class="day-label" style="color:#449342">Walk</div><div class="day-dur">20–30 min</div></div>
+    <div class="day ssc-opt"><div class="day-name">Sat</div><div class="day-label" style="color:var(--teal)">Full Body</div><div class="day-dur">Optional</div></div>
+    <div class="day ssc-mob"><div class="day-name">Sun</div><div class="day-label" style="color:var(--gold)">Mobility</div><div class="day-dur">Optional</div></div>
+  </div>
+
+  <div class="info-box" style="background:rgba(46,175,125,.07);border-color:rgba(46,175,125,.2);">
+    <strong style="color:#2eaf7d">Cardio options:</strong> Brisk outdoor walk, incline treadmill (12 incline / 3 MPH), cycling, jogging, elliptical, swimming, hiking, rowing, or Stairmaster (level 7 / 25 min). Target: steady 130–150 BPM the entire time.
+  </div>
+</div>
+
+<!-- ══════ SSC MONDAY ══════ -->
+<div id="sec-ssc-monday" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Monday — Upper Body</div>
+    <div class="sec-sub">Biceps · Triceps · Core · 4 circuits · ~25 min · Rest 1 min between circuits</div>
+  </div>
+  <p class="rest-note">Complete all exercises in a circuit back-to-back, rest 1 minute, then repeat. Circuits 1–3 repeat 3×, Circuit 4 repeats 2×.</p>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 1</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Slow Bicep Curl</div><span class="cl-reps">12 reps</span></li>
+      <li><div class="cl-name">Skull Crushers</div><span class="cl-reps">10 reps</span></li>
+      <li><div class="cl-name">Bicep Curl + Squat</div><span class="cl-reps">10–12 reps</span></li>
+      <li><div class="cl-name">Reverse Lunge to Hammer Curl</div><span class="cl-reps">8 reps each side</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 2</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Overhead Pull Down</div><span class="cl-reps">16 reps</span></li>
+      <li>
+        <div class="cl-name">Push Ups<span class="cl-mod">Mod: Go to knees or use wall</span></div>
+        <span class="cl-reps">10–12 reps</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 3</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Sumo Squat + Bicep Curl</div><span class="cl-reps">8 reps each side</span></li>
+      <li><div class="cl-name">Bird-Dog Crunch</div><span class="cl-reps">8 reps each side</span></li>
+      <li>
+        <div class="cl-name">Ball Squeeze Alt. Kick Outs<span class="cl-mod">Use pillow if no ball</span></div>
+        <span class="cl-reps">8 reps each side</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 4</span>
+      <span class="circuit-head-rep">Repeat 2×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Tricep Push Ups</div><span class="cl-reps">12 reps</span></li>
+      <li><div class="cl-name">Isometric Bicep Hold + Alt Half Curl</div><span class="cl-reps">16 reps</span></li>
+      <li><div class="cl-name">Bear Hold Kick Through</div><span class="cl-reps">10 reps each side</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════ SSC TUESDAY ══════ -->
+<div id="sec-ssc-tuesday" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Tuesday — Lower Body</div>
+    <div class="sec-sub">Quads · Glutes · Hamstrings · 4 circuits · ~25 min · Rest 1 min between circuits</div>
+  </div>
+  <p class="rest-note">Complete all exercises in a circuit back-to-back, rest 1 minute, then repeat. Circuits 1–3 repeat 3×, Circuit 4 repeats 2×.</p>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 1</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Staggered Deadlift</div><span class="cl-reps">12 reps each side</span></li>
+      <li><div class="cl-name">Suitcase Squats</div><span class="cl-reps">12–14 reps</span></li>
+      <li><div class="cl-name">Glute Bridge March</div><span class="cl-reps">12 reps</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 2</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">DB Overhead Sumo Squat</div><span class="cl-reps">10–12 reps</span></li>
+      <li>
+        <div class="cl-name">Inverted Butt Taps<span class="cl-mod">Mod: No jump, just tap</span></div>
+        <span class="cl-reps">12 reps</span>
+      </li>
+      <li><div class="cl-name">Deadlift Clean + Squat</div><span class="cl-reps">12 reps</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 3</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Elevated Glute Bridge</div><span class="cl-reps">12 reps</span></li>
+      <li><div class="cl-name">Split Squat</div><span class="cl-reps">10 reps each side</span></li>
+      <li>
+        <div class="cl-name">Jump Lunge + Squat<span class="cl-mod">Mod: No jump</span></div>
+        <span class="cl-reps">8–10 reps each side</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 4</span>
+      <span class="circuit-head-rep">Repeat 2×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Froggers</div><span class="cl-reps">16 reps</span></li>
+      <li><div class="cl-name">Curtsy Lunge with DB</div><span class="cl-reps">12 reps each side</span></li>
+      <li><div class="cl-name">2 Pulse Sumo Squat + Upright Row</div><span class="cl-reps">10–12 reps</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════ SSC THURSDAY ══════ -->
+<div id="sec-ssc-thursday" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Thursday — Full Body</div>
+    <div class="sec-sub">Full Body · 4 circuits · ~25 min · Rest 1 min between circuits</div>
+  </div>
+  <p class="rest-note">Complete all exercises in a circuit back-to-back, rest 1 minute, then repeat. Circuits 1–3 repeat 3×, Circuit 4 repeats 2×.</p>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 1</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Side Shoulder Raise</div><span class="cl-reps">12 reps</span></li>
+      <li><div class="cl-name">Curtsy Lunge + Upright Row</div><span class="cl-reps">8 reps each side</span></li>
+      <li><div class="cl-name">Plank Pull Through</div><span class="cl-reps">12 reps</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 2</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li>
+        <div class="cl-name">Jump Squats<span class="cl-mod">Mod: No jump</span></div>
+        <span class="cl-reps">20–30 reps</span>
+      </li>
+      <li><div class="cl-name">Push Up to Side Plank Hold (3 sec)</div><span class="cl-reps">6 reps each side</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 3</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Bird-Dog Crunch</div><span class="cl-reps">8 reps each side</span></li>
+      <li><div class="cl-name">Sumo Squat to Calf Raise</div><span class="cl-reps">12 reps</span></li>
+      <li><div class="cl-name">Curtsy Lunge with DB</div><span class="cl-reps">12 reps</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 4</span>
+      <span class="circuit-head-rep">Repeat 2×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Side Plank Knee Raise (Right + Left)</div><span class="cl-reps">8 reps each side</span></li>
+      <li><div class="cl-name">Squat + Elbow to Knee</div><span class="cl-reps">8 reps each side</span></li>
+      <li>
+        <div class="cl-name">Ball Squeeze Alt. Kick Outs<span class="cl-mod">Use pillow if no ball</span></div>
+        <span class="cl-reps">8 reps each side</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════ SSC SATURDAY ══════ -->
+<div id="sec-ssc-saturday" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Saturday — Full Body</div>
+    <div class="sec-sub">Optional · Full Body · 4 circuits · ~25 min · Rest 1 min between circuits</div>
+  </div>
+  <p class="rest-note">Complete all exercises in a circuit back-to-back, rest 1 minute, then repeat. Circuits 1–3 repeat 3×, Circuit 4 repeats 2×.</p>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 1</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li>
+        <div class="cl-name">Squat Jacks<span class="cl-mod">Mod: Squat + calf raise</span></div>
+        <span class="cl-reps">20 reps</span>
+      </li>
+      <li><div class="cl-name">4 Mountain Climbers + Push Up</div><span class="cl-reps">8 reps</span></li>
+      <li><div class="cl-name">Arnold Press</div><span class="cl-reps">12 reps</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 2</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li>
+        <div class="cl-name">Full Burpee + Hammer Curl + Shoulder Press<span class="cl-mod">Mod: Step out instead of jump</span></div>
+        <span class="cl-reps">10 reps</span>
+      </li>
+      <li><div class="cl-name">Single Arm Tricep Kickback</div><span class="cl-reps">12 reps each side</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 3</span>
+      <span class="circuit-head-rep">Repeat 3×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Alt. Reverse Lunge + DB Press Out</div><span class="cl-reps">8 reps each side</span></li>
+      <li><div class="cl-name">Isometric Bicep Hold + Alt. Half Raise</div><span class="cl-reps">16 reps</span></li>
+      <li><div class="cl-name">Standing Chest Fly</div><span class="cl-reps">12 reps</span></li>
+    </ul>
+  </div>
+
+  <div class="circuit-block">
+    <div class="circuit-head">
+      <span class="circuit-head-title">Circuit 4</span>
+      <span class="circuit-head-rep">Repeat 2×</span>
+    </div>
+    <ul class="circuit-list">
+      <li><div class="cl-name">Bear Hold Tap Outs + Resistance</div><span class="cl-reps">16 reps</span></li>
+      <li><div class="cl-name">Side Plank Reach Under</div><span class="cl-reps">8 reps each side</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════ SSC MOBILITY ══════ -->
+<div id="sec-ssc-mobility" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Mobility Flow</div>
+    <div class="sec-sub">Optional Sunday recovery · Recover &amp; Reset · Equipment: Mat</div>
+  </div>
+
+  <div class="info-box" style="background:rgba(200,169,110,.07);border-color:rgba(200,169,110,.2);">
+    <strong style="color:var(--gold)">How to use:</strong> Move through each exercise at your own pace. Hold each position for 30–60 seconds — longer if an area feels especially tight. This isn't a workout; the goal is to slow down, release tension, and let your body recover from the week.
+  </div>
+
+  <div class="mobility-block">
+    <div class="mobility-head">
+      <span class="mobility-head-title">Mobility Flow — Full Sequence</span>
+    </div>
+    <ul class="mobility-list">
+      <li><span class="ml-name">Cat Cow</span><span class="ml-dur">60 sec</span></li>
+      <li><span class="ml-name">Side Stretch</span><span class="ml-dur">30–60 sec</span></li>
+      <li><span class="ml-name">Plank to Downward Dog</span><span class="ml-dur">30–60 sec</span></li>
+      <li><span class="ml-name">Child's Pose</span><span class="ml-dur">30–60 sec</span></li>
+      <li><span class="ml-name">Pigeon Stretch</span><span class="ml-dur">30–60 sec each side</span></li>
+      <li><span class="ml-name">Resistance Band Pass Through</span><span class="ml-dur">30–60 sec</span></li>
+      <li><span class="ml-name">Sitting Hamstring Stretch</span><span class="ml-dur">30–60 sec each side</span></li>
+      <li><span class="ml-name">Figure Four Stretch</span><span class="ml-dur">30–60 sec each side</span></li>
+      <li><span class="ml-name">Knee to Chest Stretch</span><span class="ml-dur">30–60 sec each side</span></li>
+      <li><span class="ml-name">Butterfly Stretch</span><span class="ml-dur">30–60 sec</span></li>
+    </ul>
+  </div>
+</div>
+
 </div>
 <script>
-function showTab(id,btn){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('sec-'+id).classList.add('active');
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
   btn.classList.add('active');
+}
+
+function switchProgram(prog, btn) {
+  document.querySelectorAll('.prog-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('nav-2515').style.display = prog === '2515' ? 'flex' : 'none';
+  document.getElementById('nav-ssc').style.display = prog === 'ssc' ? 'flex' : 'none';
+  document.getElementById('pills-2515').style.display = prog === '2515' ? '' : 'none';
+  document.getElementById('pills-ssc').style.display = prog === 'ssc' ? '' : 'none';
+  document.body.classList.toggle('ssc-mode', prog === 'ssc');
+  if (prog === '2515') {
+    showTab('overview', document.querySelector('#nav-2515 .tab'));
+  } else {
+    showTab('ssc-overview', document.querySelector('#nav-ssc .tab'));
+  }
 }
 </script>
 </body>
