@@ -18,9 +18,9 @@
   /* HEADER */
   .sticky-top{position:sticky;top:0;z-index:100;}
   .header{background:var(--surface);border-bottom:1px solid var(--border);padding:26px 22px 18px;}
-  .header-top{display:flex;align-items:flex-end;gap:14px;}
+  .header-top{display:flex;align-items:center;gap:14px;}
   .wordmark{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,10vw,72px);line-height:1;letter-spacing:.06em;display:flex;align-items:baseline;gap:.04em;}
-  .wordmark .n1{color:var(--gold);} .wordmark .dot{color:#333;font-size:.55em;} .wordmark .n2{color:var(--red);} .wordmark .n3{color:var(--blue);}
+  .wordmark .n1{color:var(--gold);} .wordmark .dot{color:var(--white);font-size:.55em;} .wordmark .n2{color:var(--red);} .wordmark .n3{color:var(--blue);}
   .pillrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
   .pill{display:flex;align-items:center;gap:8px;border-radius:3px;padding:6px 11px;}
   .pill-gold{background:rgba(200,169,110,.12);border:1px solid rgba(200,169,110,.3);}
@@ -33,8 +33,8 @@
   .pill-text span{font-size:11px;color:var(--muted);}
 
   /* PROGRAM SWITCHER */
-  .prog-switch{display:flex;gap:4px;align-items:center;padding-bottom:6px;}
-  .prog-btn{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;padding:4px 10px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:all .15s;}
+  .prog-switch{display:flex;gap:4px;align-items:center;}
+  .prog-btn{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.08em;padding:3px 10px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:all .25s ease;}
   .prog-btn:hover{color:var(--dim);border-color:#444;}
   .prog-btn.active[data-prog="2515"]{background:rgba(200,169,110,.15);border-color:rgba(200,169,110,.4);color:var(--gold);}
   .prog-btn.active[data-prog="ssc"]{background:rgba(63,208,201,.15);border-color:rgba(63,208,201,.4);color:var(--teal);}
@@ -151,6 +151,7 @@
   .sticky-top.scrolled .header{padding:8px 22px 6px;}
   .sticky-top.scrolled .wordmark{font-size:28px;}
   .sticky-top.scrolled .pillrow{max-height:0;opacity:0;margin-top:0;}
+  .sticky-top.scrolled .prog-btn{font-size:13px;padding:2px 7px;}
 </style>
 </head>
 <body>
@@ -180,8 +181,9 @@
   <button class="tab active" onclick="showTab('overview',this)">Overview</button>
   <button class="tab" onclick="showTab('session-a',this)">Session A · Mon</button>
   <button class="tab" onclick="showTab('session-b',this)">Session B · Thu</button>
-  <button class="tab" onclick="showTab('session-c',this)">Session C · Core</button>
+  <button class="tab" onclick="showTab('session-c',this)">Core</button>
   <button class="tab" onclick="showTab('library',this)">Swap Library</button>
+  <button class="tab" onclick="showTab('bodyweight',this)">BodyWght</button>
 </nav>
 <nav id="nav-ssc" class="nav" style="display:none">
   <button class="tab active" onclick="showTab('ssc-overview',this)">Overview</button>
@@ -340,7 +342,7 @@
 <!-- ══════ SESSION C ══════ -->
 <div id="sec-session-c" class="section">
   <div class="sec-head">
-    <div class="sec-title">Session C — Core</div>
+    <div class="sec-title">Core</div>
     <div class="sec-sub">Optional add-on · Hits every core muscle · 5 sets each · 15 total sets · ~25 min · Rest 60 sec between sets</div>
   </div>
 
@@ -522,6 +524,84 @@
 
   <div class="sources">
     Sources: <a href="https://blog.nasm.org/functional-training-compound-workouts" target="_blank">NASM — Functional Training: Compound Workouts</a> · <a href="https://thefitnessphantom.com/dumbbell-compound-exercises" target="_blank">Fitness Phantom — 25 Best Dumbbell Compound Exercises</a> · <a href="https://www.nourishmovelove.com/full-body-compound-exercises/" target="_blank">NML — 9 Best Compound Exercises</a> · <a href="https://www.runstreet.com/blog/compound-exercises-with-dumbbells" target="_blank">Runstreet — Top 10 Compound Dumbbell Exercises</a>
+  </div>
+</div>
+
+<!-- ══════ BODYWEIGHT ══════ -->
+<div id="sec-bodyweight" class="section">
+  <div class="sec-head">
+    <div class="sec-title">BodyWght</div>
+    <div class="sec-sub">5 compound bodyweight movements · 3 sets each · 15 total sets · ~30 min · Rest 90 sec between sets</div>
+  </div>
+
+  <div class="tally">
+    <div class="tally-title">Muscle Coverage — how each group gets its sets</div>
+    <div class="tally-row"><span class="tally-muscle">Chest</span><span class="tally-sets">3</span><span class="tally-via">Push-up → T-Rotation</span></div>
+    <div class="tally-row"><span class="tally-muscle">Triceps</span><span class="tally-sets">3+3</span><span class="tally-via">Push-up + Pike Push-up</span></div>
+    <div class="tally-row"><span class="tally-muscle">Shoulders</span><span class="tally-sets">3+3</span><span class="tally-via">Push-up + Pike Push-up</span></div>
+    <div class="tally-row"><span class="tally-muscle">Obliques / Core</span><span class="tally-sets">3+</span><span class="tally-via">Push-up → T-Rotation + distributed</span></div>
+    <div class="tally-row"><span class="tally-muscle">Quads / Glutes / Hamstrings</span><span class="tally-sets">3</span><span class="tally-via">Bulgarian Split Squat</span></div>
+    <div class="tally-row"><span class="tally-muscle">Glutes / Hamstrings</span><span class="tally-sets">3</span><span class="tally-via">Single-Leg Glute Bridge</span></div>
+    <div class="tally-row"><span class="tally-muscle">Lower Back / Rear Delts / Rhomboids</span><span class="tally-sets">3</span><span class="tally-via">Superman → Row</span></div>
+    <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://tenor.com/bPuTM.gif" alt="Push Up T-Rotation" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Push-up → T-Rotation</div>
+        <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">6–8 reps each side</span><span class="tag tag-src">NASM Advanced Push</span></div>
+        <div class="ex-tip"><strong>How:</strong> Do a push-up, then at the top rotate and reach one arm to the ceiling until your body forms a "T". Alternate the rotation side each rep. NASM lists this as their advanced functional push pattern — the rotation adds an oblique and rotational core element absent from any flat press. Elevate your feet or add a dumbbell on your back when bodyweight feels easy.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/2/0/8/3/12083.gif" alt="Bulgarian Split Squat" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Bulgarian Split Squat</div>
+        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-s">Core (balance)</span><span class="mc mc-s">Calves</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">8–10 reps each leg</span><span class="tag tag-src">NASM Advanced Lunge</span></div>
+        <div class="ex-tip"><strong>How:</strong> Place the top of your rear foot on a chair or sofa behind you, front foot stepped well forward. Lower until your front thigh is parallel to the floor — drive through the heel to stand. The elevated rear foot forces your front leg to handle nearly all the load. EMG studies show higher quad and glute activation than a standard squat. Go slow on the descent — that's where the work is.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/6/5/2/2/6522.gif" alt="Pike Push-up" onerror="this.outerHTML='<div class=fallback>🔺</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Pike Push-up</div>
+        <div class="ex-muscles"><span class="mc mc-p">Shoulders (all heads)</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Upper Chest</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">ACE / Calisthenics Research</span></div>
+        <div class="ex-tip"><strong>How:</strong> Start in a downward dog position — hips high, body in an inverted V. Bend your elbows and lower your head toward the floor between your hands, then press back up. The angle shifts the load heavily onto all three deltoid heads in a way a flat push-up can't reach. Elevate your feet on a chair to increase difficulty and approximate a vertical press.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/4/2/6/0/24260.gif" alt="Superman Row" onerror="this.outerHTML='<div class=fallback>🦸</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Superman → Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Lower Back</span><span class="mc mc-p">Rear Delts</span><span class="mc mc-p">Rhomboids</span><span class="mc mc-s">Glutes</span><span class="mc mc-s">Traps</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">12–15 reps</span><span class="tag tag-src">NASM Posterior Chain</span></div>
+        <div class="ex-tip"><strong>How:</strong> Lie face down, arms extended forward. In one motion, lift your chest and arms off the floor — then pull your elbows back toward your hips, squeezing the shoulder blades together at the top. Hold for a beat, extend arms forward again, then lower. The lift fires the entire posterior chain; the row adds rhomboid and rear delt activation. No bicep load without something to pull against — this is pure posterior chain work. Go slow and hold the top position each rep.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/9/2/5/5/19255.gif" alt="Single-Leg Glute Bridge" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Single-Leg Glute Bridge</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Lower Back</span><span class="mc mc-s">Core</span><span class="mc mc-s">Hip Flexors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">12 reps each side</span><span class="tag tag-src">NCBI EMG — highest BW glute activation</span></div>
+        <div class="ex-tip"><strong>How:</strong> Lie on your back, one foot flat on the floor, the other leg extended straight. Drive through your grounded heel and lift your hips until your body forms a straight line from shoulder to knee. Pause and squeeze hard at the top. Single-leg removes the compensation that lets a weak glute hide in a bilateral bridge — EMG studies show significantly higher gluteus maximus activation than the two-leg version.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="info-box" style="background:rgba(224,92,92,.07);border-color:rgba(224,92,92,.2);margin-top:14px;">
+    <strong style="color:var(--red)">Known gap — Lats &amp; Biceps:</strong> Pure bodyweight training cannot load the lats or biceps without something to pull against. This session covers every other major muscle group. To close the gap: a doorframe row, resistance band, or pull-up bar added as a 6th exercise will complete full-body coverage.
   </div>
 </div>
 
@@ -879,6 +959,13 @@ function switchProgram(prog, btn) {
   document.getElementById('pills-2515').style.display = prog === '2515' ? '' : 'none';
   document.getElementById('pills-ssc').style.display = prog === 'ssc' ? '' : 'none';
   document.body.classList.toggle('ssc-mode', prog === 'ssc');
+  document.title = prog === 'ssc' ? 'SSC' : '2·5·15 Workout Method';
+  const wm = document.querySelector('.wordmark');
+  if (prog === 'ssc') {
+    wm.innerHTML = '<span style="color:var(--teal)">S</span><span class="dot">·</span><span style="color:var(--teal)">S</span><span class="dot">·</span><span style="color:var(--teal)">C</span>';
+  } else {
+    wm.innerHTML = '<span class="n1">2</span><span class="dot">·</span><span class="n2">5</span><span class="dot">·</span><span class="n3">15</span>';
+  }
   if (prog === '2515') {
     showTab('overview', document.querySelector('#nav-2515 .tab'));
   } else {
