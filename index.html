@@ -152,6 +152,13 @@
   .sticky-top.scrolled .wordmark{font-size:28px;}
   .sticky-top.scrolled .pillrow{max-height:0;opacity:0;margin-top:0;}
   .sticky-top.scrolled .prog-btn{font-size:13px;padding:2px 7px;}
+
+  /* WORKOUT PICKER + COOK MODE */
+  .wpanel{display:none;} .wpanel.active{display:block;}
+  .workout-bar{display:flex;gap:8px;margin-bottom:16px;}
+  .workout-bar select{flex:1;min-width:0;background:var(--card);color:var(--white);border:1px solid var(--border);border-radius:4px;padding:11px 12px;font:inherit;font-size:14px;font-weight:500;}
+  .cookmode{background:var(--card);color:var(--dim);border:1px solid var(--border);border-radius:4px;padding:11px 12px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+  .cookmode.on{background:var(--green);border-color:var(--green);color:#fff;}
 </style>
 </head>
 <body>
@@ -178,12 +185,9 @@
 </header>
 
 <nav id="nav-2515" class="nav">
-  <button class="tab active" onclick="showTab('overview',this)">Overview</button>
-  <button class="tab" onclick="showTab('session-a',this)">Session A · Mon</button>
-  <button class="tab" onclick="showTab('session-b',this)">Session B · Thu</button>
-  <button class="tab" onclick="showTab('session-c',this)">Core</button>
+  <button class="tab active" onclick="showTab('workout',this)">Workout</button>
   <button class="tab" onclick="showTab('library',this)">Swap Library</button>
-  <button class="tab" onclick="showTab('bodyweight',this)">BodyWght</button>
+  <button class="tab" onclick="showTab('overview',this)">Overview</button>
 </nav>
 <nav id="nav-ssc" class="nav" style="display:none">
   <button class="tab active" onclick="showTab('ssc-overview',this)">Overview</button>
@@ -197,44 +201,26 @@
 
 <div class="main">
 
-<!-- ══════ OVERVIEW ══════ -->
-<div id="sec-overview" class="section active">
+<!-- ══════ WORKOUT ══════ -->
+<div id="sec-workout" class="section active">
+  <div class="workout-bar">
+    <select id="workoutSelect" onchange="showWorkout(this.value)" aria-label="Choose workout">
+      <option value="session-a">Power Builder</option>
+      <option value="session-b">Balance &amp; Rotate</option>
+      <option value="session-c">Core</option>
+      <option value="bodyweight">Bodyweight</option>
+      <option value="arms-abs">Arms &amp; Abs</option>
+      <option value="classic">Classic Strength</option>
+      <option value="barracks">Barracks</option>
+      <option value="carry-crawl">Carry &amp; Crawl</option>
+    </select>
+    <button class="cookmode" id="cookMode" type="button">☀️ Cook Mode</button>
+  </div>
+
+<!-- ══════ POWER BUILDER ══════ -->
+<div id="wp-session-a" class="wpanel active">
   <div class="sec-head">
-    <div class="sec-title">The Structure</div>
-    <div class="sec-sub">2 full-body sessions per week. Every session hits every muscle group. 15 sets total each time.</div>
-  </div>
-
-  <div class="info-box">
-    <strong>Why full-body and not splits?</strong> The "2" in 2-5-15 means each muscle is trained twice a week. A chest/back split would mean chest only gets hit on upper days. Full-body sessions ensure every muscle gets its 2× weekly stimulus — and compound movements mean 3 exercises × 5 sets = 15 sets covers the whole body simultaneously.
-  </div>
-
-  <div class="how-grid">
-    <div class="how-card"><div class="how-num" style="color:var(--gold)">2×</div><div class="how-title">Sessions Per Week</div><div class="how-body">Monday and Thursday. Each is a complete full-body workout. ~72 hrs between sessions — enough recovery, frequent enough stimulus.</div></div>
-    <div class="how-card"><div class="how-num" style="color:var(--red)">5</div><div class="how-title">Sets Per Muscle</div><div class="how-body">Each compound movement counts toward 2–3 muscle groups at once. A thruster = 5 sets for quads AND shoulders AND triceps in one go.</div></div>
-    <div class="how-card"><div class="how-num" style="color:var(--blue)">15</div><div class="how-title">Sets Per Session</div><div class="how-body">3 exercises × 5 sets = 15. With full-body compounds that's enough to hit every major muscle. Sessions take ~30–35 minutes.</div></div>
-    <div class="how-card"><div class="how-num" style="color:var(--green)">A/B</div><div class="how-title">Alternate Each Week</div><div class="how-body">Session A and B use different exercises for the same muscle groups — same stimulus, different movement pattern. This prevents accommodation over time.</div></div>
-  </div>
-
-  <div class="sec-head"><div class="sec-title" style="font-size:21px">Weekly Schedule</div></div>
-  <div class="week-grid">
-    <div class="day session-a"><div class="day-name">Mon</div><div class="day-label" style="color:var(--gold)">Session A</div><div class="day-dur">~35 min</div></div>
-    <div class="day rest"><div class="day-name">Tue</div><div class="day-label">Rest</div></div>
-    <div class="day rest"><div class="day-name">Wed</div><div class="day-label">Rest</div></div>
-    <div class="day session-b"><div class="day-name">Thu</div><div class="day-label" style="color:var(--blue)">Session B</div><div class="day-dur">~35 min</div></div>
-    <div class="day rest"><div class="day-name">Fri</div><div class="day-label">Rest</div></div>
-    <div class="day rest"><div class="day-name">Sat</div><div class="day-label">Rest</div></div>
-    <div class="day rest"><div class="day-name">Sun</div><div class="day-label">Rest</div></div>
-  </div>
-
-  <div class="info-box" style="background:rgba(91,155,213,.07);border-color:rgba(91,155,213,.2);">
-    <strong style="color:var(--blue)">Rest days:</strong> The method keeps rest simple. 3 days between sessions (Mon→Thu) means full recovery. If life gets in the way, Tue/Fri works just as well — just keep ~72 hrs between the two sessions.
-  </div>
-</div>
-
-<!-- ══════ SESSION A ══════ -->
-<div id="sec-session-a" class="section">
-  <div class="sec-head">
-    <div class="sec-title">Session A — Monday</div>
+    <div class="sec-title">Power Builder</div>
     <div class="sec-sub">3 full-body compounds · 5 sets each · 15 total sets · ~35 min · Rest 90 sec between sets</div>
   </div>
 
@@ -285,10 +271,10 @@
   <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Back and biceps receive secondary stimulus through stabilisation during the floor press and via the hinge/row movements. For dedicated back volume, swap the Floor Press for the Glute Bridge + Chest Fly from the Swap Library and add a bent-over row as your pull.</em></p>
 </div>
 
-<!-- ══════ SESSION B ══════ -->
-<div id="sec-session-b" class="section">
+<!-- ══════ BALANCE &amp; ROTATE ══════ -->
+<div id="wp-session-b" class="wpanel">
   <div class="sec-head">
-    <div class="sec-title">Session B — Thursday</div>
+    <div class="sec-title">Balance &amp; Rotate</div>
     <div class="sec-sub">Different movement patterns, same muscles · 5 sets each · 15 total sets · ~35 min · Rest 90 sec between sets</div>
   </div>
 
@@ -325,12 +311,12 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://tenor.com/bPuTM.gif" alt="Push Up Rotation" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/8/9/16889.gif" alt="Push Up Rotation" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Push-Up → T Rotation</div>
         <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
         <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 reps each side</span><span class="tag tag-src">NASM Advanced Push</span></div>
-        <div class="ex-tip"><strong>How:</strong> Do a push-up, then at the top rotate and reach one arm to the ceiling until your body forms a "T". Alternate the rotation side each rep. NASM lists this as their advanced functional push pattern — the rotation adds an oblique and rotational core element completely absent from the floor press in Session A. Load with a dumbbell on your back to increase difficulty.</div>
+        <div class="ex-tip"><strong>How:</strong> Do a push-up, then at the top rotate and reach one arm to the ceiling until your body forms a "T". Alternate the rotation side each rep. NASM lists this as their advanced functional push pattern — the rotation adds an oblique and rotational core element completely absent from the floor press in Power Builder. Load with a dumbbell on your back to increase difficulty.</div>
       </div>
     </div>
 
@@ -339,8 +325,8 @@
   <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Shoulders receive secondary stimulus from both the lunge-press and push-up. If you want dedicated shoulder sets, replace the Push-Up → T Rotation with the Arnold Press from the Swap Library (5 sets) — that brings dedicated shoulder volume while still covering triceps.</em></p>
 </div>
 
-<!-- ══════ SESSION C ══════ -->
-<div id="sec-session-c" class="section">
+<!-- ══════ CORE ══════ -->
+<div id="wp-session-c" class="wpanel">
   <div class="sec-head">
     <div class="sec-title">Core</div>
     <div class="sec-sub">Optional add-on · Hits every core muscle · 5 sets each · 15 total sets · ~25 min · Rest 60 sec between sets</div>
@@ -394,143 +380,13 @@
 
   </div>
 
-  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Session C is an optional add-on — fit it in on any non-consecutive day. Wed or Sat work well alongside the Mon/Thu schedule. Rest 60 sec between sets rather than 90 — core exercises recover faster than compound lifts.</em></p>
-</div>
-
-<!-- ══════ SWAP LIBRARY ══════ -->
-<div id="sec-library" class="section">
-  <div class="sec-head">
-    <div class="sec-title">Swap Library</div>
-    <div class="sec-sub">Rotate any exercise after 4–6 weeks. Each covers the same muscle groups as what it replaces.</div>
-  </div>
-
-  <div class="info-box">
-    <strong>When to swap:</strong> After 4–6 weeks your body adapts to the same movement pattern. Swapping in an alternative — same muscle groups, different pattern — restarts the adaptation cycle. You don't need to change everything at once; swapping one exercise per session is enough.
-  </div>
-
-  <div class="exercise-list">
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/2/6/2/0/22620.gif" alt="Clean Press" onerror="this.outerHTML='<div class=fallback>⚡</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">Clean and Press</div>
-        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Glutes</span><span class="mc mc-s">Triceps</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 reps</span><span class="tag tag-src">Runstreet / Fitness Phantom</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Deadlift → Upright Row (Session A). More explosive — hinge hard, pull dumbbells to shoulders (the "clean"), then press overhead. Adds a power element missing from the RDL→row.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/7/3/5/0/27350.gif" alt="DB Snatch" onerror="this.outerHTML='<div class=fallback>⚡</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">DB Snatch</div>
-        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Core</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 each side</span><span class="tag tag-src">Tom's Guide</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Deadlift → Upright Row (Session A) for a more explosive variant. Hinge down, then drive the hips hard and pull the dumbbell straight overhead in one fluid motion — no pause at the shoulder. The most full-body power movement in the dumbbell toolkit. Alternate arms each set.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/1/8/5/0/21850.gif" alt="Lateral Lunge Row" onerror="this.outerHTML='<div class=fallback>↔️</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">Lateral Lunge + Row</div>
-        <div class="ex-muscles"><span class="mc mc-p">Glutes (medius)</span><span class="mc mc-p">Adductors</span><span class="mc mc-p">Back</span><span class="mc mc-s">Quads</span><span class="mc mc-s">Biceps</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8 each side</span><span class="tag tag-src">Tom's Guide</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Reverse Lunge → Curl (Session B) for a frontal-plane variant. Step wide to one side, sink into the lunge — at the bottom pull that same-side dumbbell to your hip, then stand and repeat on the other side. The only movement in the programme that trains the frontal plane, and it doubles as a back compound.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/4/0/16840.gif" alt="Bridge Fly" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">Glute Bridge + Chest Fly</div>
-        <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Chest</span><span class="mc mc-s">Hamstrings</span><span class="mc mc-s">Core</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Fitness Phantom</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Floor Press (Session A or B). Drive hips up into a glute bridge, hold that position and perform a dumbbell chest fly. Lower body stays loaded the entire set. Entirely floor-based — one of the best mat-only upper/lower combos.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/1/5/4/3/21543.gif" alt="Bridge Skull Crusher" onerror="this.outerHTML='<div class=fallback>💀</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">Glute Bridge + Skull Crusher</div>
-        <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Core</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">NML</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Push-Up → T Rotation (Session B) when you want tricep isolation alongside glute work. Hold the bridge, lower dumbbells to temples, press back. NML programme this specifically as a glute + tricep compound — both muscles loaded simultaneously throughout.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/8/7/3/9/8739.gif" alt="Arnold Press" onerror="this.outerHTML='<div class=fallback>🌀</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">Arnold Press</div>
-        <div class="ex-muscles"><span class="mc mc-p">Shoulders (all 3 heads)</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Upper Chest</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Fitness Phantom</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Any press in either session when shoulders need more direct attention. Sit cross-legged on the mat. Start palms facing you, rotate to palms facing forward as you press overhead. The rotation recruits all three delt heads — front, side, and rear — in one movement.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><div class="fallback" style="font-size:11px;color:var(--muted);padding:10px;text-align:center;line-height:1.5;">Dumbbells overhead → kneel one leg → kneel other leg → stand back up</div></div>
-      <div class="ex-body">
-        <div class="ex-name">DB Surrender</div>
-        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Core</span><span class="mc mc-s">Hip Flexors</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 each side</span><span class="tag tag-src">Fitness Phantom</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Thruster (Session A) for variety. Hold dumbbells overhead throughout. Step one knee down to the mat, then the other (kneeling), then step back up. The overhead load challenges core stability and shoulders the entire time. Trains the transition between floor and standing — highly functional.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/9/4/5/16945.gif" alt="Curtsy Lunge Rotation" onerror="this.outerHTML='<div class=fallback>💃</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">Curtsy Lunge + Rotation</div>
-        <div class="ex-muscles"><span class="mc mc-p">Glutes (medius)</span><span class="mc mc-p">Quads</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Adductors</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8 each side</span><span class="tag tag-src">NASM Advanced Lunge</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Reverse Lunge → Curl (Session B). Cross one leg behind into a curtsy, rotate torso toward the front leg at the bottom, then rotate back and stand. NASM's advanced lunge pattern — the only movement that trains the frontal and rotational plane, which all other exercises in this programme miss.</div>
-      </div>
-    </div>
-
-  </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/6/3/16863.gif" alt="DB Russian Twist" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">DB Russian Twist</div>
-        <div class="ex-muscles"><span class="mc mc-p">Obliques</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-s">Hip Flexors</span><span class="mc mc-s">Lower Back</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">16–20 reps</span><span class="tag tag-src">Session C Swap</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Bicycle Crunch (Session C). Sit with knees bent and feet lifted, hold one dumbbell with both hands, rotate side to side touching the DB to the floor each rep. Feet off the floor raises the difficulty significantly. Goes heavier than bicycle crunch can — good when you want loaded oblique work over bodyweight volume.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/5/8/5/9/5859.gif" alt="Double Leg Lower" onerror="this.outerHTML='<div class=fallback>📐</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">Double Leg Lower</div>
-        <div class="ex-muscles"><span class="mc mc-p">Rectus Abdominis (lower)</span><span class="mc mc-p">Hip Flexors</span><span class="mc mc-s">Transverse Abs</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Session C Swap</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> Weighted Dead Bug (Session C) when you want to isolate the lower rectus abdominis. Lie flat, legs raised to 90° — slowly lower both legs together toward the floor without letting your lower back arch, then raise them back. Stop before your back lifts. Harder than it looks. Add a dumbbell between your feet to increase load.</div>
-      </div>
-    </div>
-
-    <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/3/8/1/5/8/38158.gif" alt="Plank Knee Tuck" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
-      <div class="ex-body">
-        <div class="ex-name">Plank Knee Tuck</div>
-        <div class="ex-muscles"><span class="mc mc-p">Transverse Abs</span><span class="mc mc-p">Hip Flexors</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-s">Obliques</span></div>
-        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 each side</span><span class="tag tag-src">Session C Swap</span></div>
-        <div class="ex-tip"><strong>Replaces:</strong> DB Plank Pass-Through (Session C) for a more hip-flexor-focused variation. From a high plank, drive one knee toward the same-side elbow, hold a beat, then return. Alternate sides. Keeps the anti-extension plank position while adding a dynamic hip flexor contraction — less anti-rotation than the pass-through, more hip flexor and lower RA.</div>
-      </div>
-    </div>
-
-  <div class="sources">
-    Sources: <a href="https://blog.nasm.org/functional-training-compound-workouts" target="_blank">NASM — Functional Training: Compound Workouts</a> · <a href="https://thefitnessphantom.com/dumbbell-compound-exercises" target="_blank">Fitness Phantom — 25 Best Dumbbell Compound Exercises</a> · <a href="https://www.nourishmovelove.com/full-body-compound-exercises/" target="_blank">NML — 9 Best Compound Exercises</a> · <a href="https://www.runstreet.com/blog/compound-exercises-with-dumbbells" target="_blank">Runstreet — Top 10 Compound Dumbbell Exercises</a>
-  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Core is an optional add-on — fit it in on any non-consecutive day. Wed or Sat work well alongside the Mon/Thu schedule. Rest 60 sec between sets rather than 90 — core exercises recover faster than compound lifts.</em></p>
 </div>
 
 <!-- ══════ BODYWEIGHT ══════ -->
-<div id="sec-bodyweight" class="section">
+<div id="wp-bodyweight" class="wpanel">
   <div class="sec-head">
-    <div class="sec-title">BodyWght</div>
+    <div class="sec-title">Bodyweight</div>
     <div class="sec-sub">5 compound bodyweight movements · 3 sets each · 15 total sets · ~30 min · Rest 90 sec between sets</div>
   </div>
 
@@ -549,7 +405,7 @@
   <div class="exercise-list">
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://tenor.com/bPuTM.gif" alt="Push Up T-Rotation" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/8/9/16889.gif" alt="Push Up T-Rotation" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Push-up → T-Rotation</div>
         <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
@@ -559,7 +415,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/2/0/8/3/12083.gif" alt="Bulgarian Split Squat" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/4/7/3/2/14732.gif" alt="Bulgarian Split Squat" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Bulgarian Split Squat</div>
         <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-s">Core (balance)</span><span class="mc mc-s">Calves</span></div>
@@ -589,7 +445,7 @@
     </div>
 
     <div class="ex-card">
-      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/9/2/5/5/19255.gif" alt="Single-Leg Glute Bridge" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/8/5/4/0/18540.gif" alt="Single-Leg Glute Bridge" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
       <div class="ex-body">
         <div class="ex-name">Single-Leg Glute Bridge</div>
         <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Lower Back</span><span class="mc mc-s">Core</span><span class="mc mc-s">Hip Flexors</span></div>
@@ -602,6 +458,471 @@
 
   <div class="info-box" style="background:rgba(224,92,92,.07);border-color:rgba(224,92,92,.2);margin-top:14px;">
     <strong style="color:var(--red)">Known gap — Lats &amp; Biceps:</strong> Pure bodyweight training cannot load the lats or biceps without something to pull against. This session covers every other major muscle group. To close the gap: a doorframe row, resistance band, or pull-up bar added as a 6th exercise will complete full-body coverage.
+  </div>
+</div>
+
+<!-- ══════ ARMS &AMP; ABS ══════ -->
+<div id="wp-arms-abs" class="wpanel">
+  <div class="sec-head">
+    <div class="sec-title">Arms &amp; Abs</div>
+    <div class="sec-sub">No legs · 3 arm exercises + 2 core exercises · 3 sets each · 15 total sets · ~25 min · Rest 60 sec between sets</div>
+  </div>
+
+  <div class="tally">
+    <div class="tally-title">Muscle Coverage — how each group gets its sets</div>
+    <div class="tally-row"><span class="tally-muscle">Biceps</span><span class="tally-sets">3</span><span class="tally-via">DB Curl</span></div>
+    <div class="tally-row"><span class="tally-muscle">Triceps (long head)</span><span class="tally-sets">3+3</span><span class="tally-via">Floor Skull Crusher + Overhead Extension</span></div>
+    <div class="tally-row"><span class="tally-muscle">Triceps / Chest</span><span class="tally-sets">3</span><span class="tally-via">Close-grip Push-up</span></div>
+    <div class="tally-row"><span class="tally-muscle">Deep Core</span><span class="tally-sets">3</span><span class="tally-via">Dead Bug</span></div>
+    <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/4/5/4/2/14542.gif" alt="DB Curl" onerror="this.outerHTML='<div class=fallback>💪</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Curl</div>
+        <div class="ex-muscles"><span class="mc mc-p">Biceps</span><span class="mc mc-s">Forearms</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10 reps</span></div>
+        <div class="ex-tip"><strong>How:</strong> Stand tall, elbows pinned to your ribs. Curl both dumbbells up, rotating your palms to face your shoulders, then lower for a slow 3-count. Do not swing.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/1/5/4/3/21543.gif" alt="Floor Skull Crusher" onerror="this.outerHTML='<div class=fallback>💀</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Floor Skull Crusher</div>
+        <div class="ex-muscles"><span class="mc mc-p">Triceps</span><span class="mc mc-s">Shoulders</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10–12 reps</span></div>
+        <div class="ex-tip"><strong>How:</strong> Lie on the mat, elbows pointing at the ceiling and dumbbells above your forehead. Bend only at the elbows to lower the weights toward your head until your upper arms touch the floor, then extend. The floor stops the range of motion, which is easier on the elbows.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/5/8/4/9/15849.gif" alt="Overhead Triceps Extension" onerror="this.outerHTML='<div class=fallback>🙆</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Overhead Triceps Extension</div>
+        <div class="ex-muscles"><span class="mc mc-p">Triceps (long head)</span><span class="mc mc-s">Core</span><span class="mc mc-s">Shoulders</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10–12 reps</span></div>
+        <div class="ex-tip"><strong>How:</strong> Hold one dumbbell with both hands overhead (sit or stand). Lower it behind your head by bending your elbows, upper arms still, then press back up. The overhead position stretches the long head, the biggest part of the triceps.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/6/4/5/4/26454.gif" alt="Close-grip Push-up" onerror="this.outerHTML='<div class=fallback>🔻</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Close-grip Push-up</div>
+        <div class="ex-muscles"><span class="mc mc-p">Triceps</span><span class="mc mc-p">Chest</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">8–12 reps</span></div>
+        <div class="ex-tip"><strong>How:</strong> Hands shoulder-width or a bit narrower, elbows brushing your ribs on the way down. Knees down if needed. A bodyweight triceps finisher.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/8/6/0/8/18608.gif" alt="Dead Bug" onerror="this.outerHTML='<div class=fallback>🪲</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Dead Bug</div>
+        <div class="ex-muscles"><span class="mc mc-p">Transverse Abdominis</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-s">Hip Flexors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">8 each side</span><span class="tag tag-src">Core</span></div>
+        <div class="ex-tip"><strong>How:</strong> Lie on your back, arms straight up, knees bent at 90°. Press your lower back into the mat, then slowly extend the opposite arm and leg toward the floor without letting your back arch. Return and switch. Hold a light dumbbell overhead when it gets easy.</div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin:6px 0 0;"><strong>Optional add-ons (21-set day):</strong> Hammer Curl 3 × 10 and Russian Twist 3 × 16–20.</div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/5/7/7/7/15777.gif" alt="Hammer Curl" onerror="this.outerHTML='<div class=fallback>🔨</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Hammer Curl (optional)</div>
+        <div class="ex-muscles"><span class="mc mc-p">Biceps</span><span class="mc mc-p">Brachialis</span><span class="mc mc-s">Forearms</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10 reps</span><span class="tag tag-src">Add-on</span></div>
+        <div class="ex-tip"><strong>How:</strong> Palms facing each other like you are holding a hammer. Curl up with elbows pinned, lower slowly.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/6/3/16863.gif" alt="Dumbbell Russian Twist" onerror="this.outerHTML='<div class=fallback>🌀</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Russian Twist (optional)</div>
+        <div class="ex-muscles"><span class="mc mc-p">Obliques</span><span class="mc mc-s">Rectus Abdominis</span><span class="mc mc-s">Hip Flexors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">16–20 reps</span><span class="tag tag-src">Add-on</span></div>
+        <div class="ex-tip"><strong>How:</strong> Sit with knees bent, lean back slightly, feet on the floor or lifted. Hold one dumbbell with both hands and rotate it from hip to hip.</div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>This day skips legs, back and chest. Use it on weeks when a run leaves your legs shot, not as a regular replacement for the full-body sessions.</em></p>
+</div>
+
+<!-- ══════ CLASSIC STRENGTH ══════ -->
+<div id="wp-classic" class="wpanel">
+  <div class="sec-head">
+    <div class="sec-title">Classic Strength</div>
+    <div class="sec-sub">5 compound movements · 3 sets each · 15 total sets · ~30 min · Rest 90 sec between sets</div>
+  </div>
+
+  <div class="tally">
+    <div class="tally-title">Muscle Coverage — how each group gets its sets</div>
+    <div class="tally-row"><span class="tally-muscle">Quads / Glutes</span><span class="tally-sets">3</span><span class="tally-via">Goblet Squat</span></div>
+    <div class="tally-row"><span class="tally-muscle">Hamstrings / Glutes / Lower Back</span><span class="tally-sets">3</span><span class="tally-via">DB Romanian Deadlift</span></div>
+    <div class="tally-row"><span class="tally-muscle">Chest / Triceps / Shoulders</span><span class="tally-sets">3</span><span class="tally-via">Push-up</span></div>
+    <div class="tally-row"><span class="tally-muscle">Lats / Rhomboids / Biceps</span><span class="tally-sets">3</span><span class="tally-via">One-arm DB Row</span></div>
+    <div class="tally-row"><span class="tally-muscle">Deep Core</span><span class="tally-sets">3</span><span class="tally-via">Dead Bug</span></div>
+    <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/0/2/8/3/10283.gif" alt="Goblet Squat" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Goblet Squat</div>
+        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-s">Core</span><span class="mc mc-s">Upper Back</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10 reps</span><span class="tag tag-src">Squat pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Hold one dumbbell vertically against your chest. Feet shoulder-width, sit straight down between your knees until your thighs are parallel, then drive up through your heels. Holding the weight in front keeps your torso upright, which is easy on the lower back.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/0/2/4/0/20240.gif" alt="DB Romanian Deadlift" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Romanian Deadlift</div>
+        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Lower Back</span><span class="mc mc-s">Traps</span><span class="mc mc-s">Grip</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10 reps</span><span class="tag tag-src">Hinge pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Dumbbells in front of your thighs, soft knees. Push your hips straight back and slide the weights down your legs until you feel a hamstring stretch, back flat. Squeeze your glutes to stand tall. Lower only as far as your back stays flat.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/8/2/6/1/18261.gif" alt="Push-up" onerror="this.outerHTML='<div class=fallback>💪</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Push-up</div>
+        <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">8–12 reps</span><span class="tag tag-src">Push pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Hands just wider than your shoulders, body in one straight line. Lower your chest to the floor with elbows about 45° from your ribs, then press away. Too hard? Hands on a chair or sofa. Too easy? Slow the lowering to 3 seconds.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/1/8/3/4/21834.gif" alt="One-arm DB Row" onerror="this.outerHTML='<div class=fallback>🚣</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">One-arm DB Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Lats</span><span class="mc mc-p">Rhomboids</span><span class="mc mc-s">Biceps</span><span class="mc mc-s">Rear Delts</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10 reps each side</span><span class="tag tag-src">Pull pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Put one hand and the same-side knee on a chair or sofa, back flat. Let the dumbbell hang, then pull your elbow up toward your hip and squeeze your shoulder blade back. Lower under control. This is your main lat and biceps work in the programme.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/8/6/0/8/18608.gif" alt="Dead Bug" onerror="this.outerHTML='<div class=fallback>🪲</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Dead Bug</div>
+        <div class="ex-muscles"><span class="mc mc-p">Transverse Abdominis</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-s">Hip Flexors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">8 each side</span><span class="tag tag-src">Core</span></div>
+        <div class="ex-tip"><strong>How:</strong> Lie on your back, arms straight up, knees bent at 90°. Press your lower back into the mat, then slowly extend the opposite arm and leg toward the floor without letting your back arch. Return and switch. Hold a light dumbbell overhead when it gets easy.</div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Push, pull, squat, hinge and core in one session. If it feels easy, add a 4th set before adding weight.</em></p>
+</div>
+
+<!-- ══════ BARRACKS ══════ -->
+<div id="wp-barracks" class="wpanel">
+  <div class="sec-head">
+    <div class="sec-title">Barracks</div>
+    <div class="sec-sub">Military-inspired · 5 joint-friendly movements · 3 sets each · 15 total sets · ~30 min · Rest 60–90 sec between sets</div>
+  </div>
+
+  <div class="tally">
+    <div class="tally-title">Muscle Coverage — how each group gets its sets</div>
+    <div class="tally-row"><span class="tally-muscle">Quads / Glutes</span><span class="tally-sets">3</span><span class="tally-via">DB Step-up</span></div>
+    <div class="tally-row"><span class="tally-muscle">Glutes / Hamstrings</span><span class="tally-sets">3</span><span class="tally-via">DB Glute Bridge</span></div>
+    <div class="tally-row"><span class="tally-muscle">Chest / Triceps / Shoulders</span><span class="tally-sets">3</span><span class="tally-via">Push-up (incline if needed)</span></div>
+    <div class="tally-row"><span class="tally-muscle">Lats / Rhomboids / Biceps</span><span class="tally-sets">3</span><span class="tally-via">Bent-over Row</span></div>
+    <div class="tally-row"><span class="tally-muscle">Core / Shoulders</span><span class="tally-sets">3</span><span class="tally-via">Bear Plank Hold</span></div>
+    <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/4/4/9/7/14497.gif" alt="DB Step-up" onerror="this.outerHTML='<div class=fallback>🪜</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Step-up</div>
+        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-s">Hamstrings</span><span class="mc mc-s">Core (balance)</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">8 reps each leg</span><span class="tag tag-src">Military swap for burpees</span></div>
+        <div class="ex-tip"><strong>How:</strong> Dumbbells at your sides, one foot fully on a sturdy chair or step. Drive through that heel to stand tall, then lower slowly. Finish all reps on one leg before switching. This is the joint-friendly replacement for burpees and jump squats in military-style programmes for lifters over 40.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/4/0/16840.gif" alt="DB Glute Bridge" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Glute Bridge</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-s">Core</span><span class="mc mc-s">Lower Back</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">12 reps</span><span class="tag tag-src">Hinge pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Lie on your back, knees bent, a dumbbell across your hips. Drive through your heels until your body is a straight line from shoulders to knees. Pause and squeeze at the top. Lower slowly.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/0/0/8/3/10083.gif" alt="Push-up" onerror="this.outerHTML='<div class=fallback>💪</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Push-up (incline if needed)</div>
+        <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">8–12 reps</span><span class="tag tag-src">Push pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Standard push-up, or hands on a chair or sofa to make it easier. Stop each set with 2–3 reps still in the tank. Military-style training for over-40s favours controlled reps over grinding to failure.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/0/0/6/9/10069.gif" alt="DB Bent-over Row" onerror="this.outerHTML='<div class=fallback>🚣</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Bent-over Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Lats</span><span class="mc mc-p">Rhomboids</span><span class="mc mc-p">Rear Delts</span><span class="mc mc-s">Biceps</span><span class="mc mc-s">Lower Back</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10 reps</span><span class="tag tag-src">Pull pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Hinge forward with a flat back, dumbbells hanging. Pull both elbows toward your hips and squeeze your shoulder blades together. This is the dumbbell replacement for the pull-up in military workouts.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/8/6/3/1/18631.gif" alt="Bear Plank" onerror="this.outerHTML='<div class=fallback>🐻</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Bear Plank Hold</div>
+        <div class="ex-muscles"><span class="mc mc-p">Core</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Quads</span><span class="mc mc-s">Glutes</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">30 sec hold</span><span class="tag tag-src">Core</span></div>
+        <div class="ex-tip"><strong>How:</strong> On hands and knees, lift your knees about an inch off the mat. Keep your back flat and knees under your hips. Breathe and hold. A joint-friendly core finisher that replaces sit-ups.</div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Barracks follows the over-40 military calisthenics ideas: controlled reps, joint-friendly swaps, 2–3 reps in reserve. Do a 5–10 minute warm-up first.</em></p>
+</div>
+
+<!-- ══════ CARRY &AMP; CRAWL ══════ -->
+<div id="wp-carry-crawl" class="wpanel">
+  <div class="sec-head">
+    <div class="sec-title">Carry &amp; Crawl</div>
+    <div class="sec-sub">Loaded carry + renegade row · 5 movements · 3 sets each · 15 total sets · ~30 min · Rest 90 sec between sets</div>
+  </div>
+
+  <div class="tally">
+    <div class="tally-title">Muscle Coverage — how each group gets its sets</div>
+    <div class="tally-row"><span class="tally-muscle">Quads / Glutes</span><span class="tally-sets">3</span><span class="tally-via">Goblet Squat</span></div>
+    <div class="tally-row"><span class="tally-muscle">Hamstrings / Glutes</span><span class="tally-sets">3</span><span class="tally-via">DB Romanian Deadlift</span></div>
+    <div class="tally-row"><span class="tally-muscle">Chest / Triceps</span><span class="tally-sets">3</span><span class="tally-via">Push-up</span></div>
+    <div class="tally-row"><span class="tally-muscle">Lats / Core / Shoulders</span><span class="tally-sets">3</span><span class="tally-via">Renegade Row</span></div>
+    <div class="tally-row"><span class="tally-muscle">Obliques / Grip / Traps</span><span class="tally-sets">3</span><span class="tally-via">Suitcase Carry</span></div>
+    <div class="tally-total"><span class="tally-total-label">Total Sets</span><span class="tally-total-num">15 ✓</span></div>
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/0/2/8/3/10283.gif" alt="Goblet Squat" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Goblet Squat</div>
+        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-s">Core</span><span class="mc mc-s">Upper Back</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10 reps</span><span class="tag tag-src">Squat pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> One dumbbell held vertically at your chest. Sit down between your knees, then drive up through your heels.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/0/2/4/0/20240.gif" alt="DB Romanian Deadlift" onerror="this.outerHTML='<div class=fallback>🏋️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Romanian Deadlift</div>
+        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Lower Back</span><span class="mc mc-s">Traps</span><span class="mc mc-s">Grip</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">10 reps</span><span class="tag tag-src">Hinge pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Push your hips back and slide the dumbbells down your legs with a flat back. Squeeze your glutes to stand.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/8/2/6/1/18261.gif" alt="Push-up" onerror="this.outerHTML='<div class=fallback>💪</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Push-up</div>
+        <div class="ex-muscles"><span class="mc mc-p">Chest</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">8–12 reps</span><span class="tag tag-src">Push pattern</span></div>
+        <div class="ex-tip"><strong>How:</strong> Straight body line, chest to the floor, elbows about 45°. Hands on a chair if you need an easier version.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/3/6/6/7/2/36672.gif" alt="Renegade Row" onerror="this.outerHTML='<div class=fallback>🦍</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Renegade Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Lats</span><span class="mc mc-p">Core</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Shoulders</span><span class="mc mc-s">Triceps</span><span class="mc mc-s">Biceps</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">6 reps each side</span><span class="tag tag-src">Pull + anti-rotation</span></div>
+        <div class="ex-tip"><strong>How:</strong> High plank with a hand on each dumbbell and feet wide. Row one dumbbell to your hip without letting your hips twist, lower it, then switch. Wider feet make it easier. Hex or flat-sided dumbbells work best.</div>
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/2/6/3/1/12631.gif" alt="Suitcase Carry" onerror="this.outerHTML='<div class=fallback>🧳</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Suitcase Carry</div>
+        <div class="ex-muscles"><span class="mc mc-p">Obliques</span><span class="mc mc-p">Grip</span><span class="mc mc-p">Traps</span><span class="mc mc-s">Glutes</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">3 sets</span><span class="tag tag-reps">40 sec each side</span><span class="tag tag-src">Loaded carry</span></div>
+        <div class="ex-tip"><strong>How:</strong> One heavy dumbbell in one hand at your side. Walk tall without leaning toward the weight or letting it swing. Switch hands for the second round. The loaded carry is a staple of military conditioning and trains the core to resist side bending.</div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><em>Short on space? Walk a loop around the room, or march in place with the dumbbell.</em></p>
+</div>
+
+</div>
+
+<!-- ══════ SWAP LIBRARY ══════ -->
+<div id="sec-library" class="section">
+  <div class="sec-head">
+    <div class="sec-title">Swap Library</div>
+    <div class="sec-sub">Rotate any exercise after 4–6 weeks. Each covers the same muscle groups as what it replaces.</div>
+  </div>
+
+  <div class="info-box">
+    <strong>When to swap:</strong> After 4–6 weeks your body adapts to the same movement pattern. Swapping in an alternative — same muscle groups, different pattern — restarts the adaptation cycle. You don't need to change everything at once; swapping one exercise per session is enough.
+  </div>
+
+  <div class="exercise-list">
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/2/6/2/0/22620.gif" alt="Clean Press" onerror="this.outerHTML='<div class=fallback>⚡</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Clean and Press</div>
+        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Glutes</span><span class="mc mc-s">Triceps</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 reps</span><span class="tag tag-src">Runstreet / Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Deadlift → Upright Row (Power Builder). More explosive — hinge hard, pull dumbbells to shoulders (the "clean"), then press overhead. Adds a power element missing from the RDL→row.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/7/3/5/0/27350.gif" alt="DB Snatch" onerror="this.outerHTML='<div class=fallback>⚡</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Snatch</div>
+        <div class="ex-muscles"><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Traps</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 each side</span><span class="tag tag-src">Tom's Guide</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Deadlift → Upright Row (Power Builder) for a more explosive variant. Hinge down, then drive the hips hard and pull the dumbbell straight overhead in one fluid motion — no pause at the shoulder. The most full-body power movement in the dumbbell toolkit. Alternate arms each set.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/1/8/5/0/21850.gif" alt="Lateral Lunge Row" onerror="this.outerHTML='<div class=fallback>↔️</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Lateral Lunge + Row</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes (medius)</span><span class="mc mc-p">Adductors</span><span class="mc mc-p">Back</span><span class="mc mc-s">Quads</span><span class="mc mc-s">Biceps</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8 each side</span><span class="tag tag-src">Tom's Guide</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Reverse Lunge → Curl (Balance &amp; Rotate) for a frontal-plane variant. Step wide to one side, sink into the lunge — at the bottom pull that same-side dumbbell to your hip, then stand and repeat on the other side. The only movement in the programme that trains the frontal plane, and it doubles as a back compound.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/4/0/16840.gif" alt="Bridge Fly" onerror="this.outerHTML='<div class=fallback>🌉</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Glute Bridge + Chest Fly</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Chest</span><span class="mc mc-s">Hamstrings</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Floor Press (Power Builder or Balance &amp; Rotate). Drive hips up into a glute bridge, hold that position and perform a dumbbell chest fly. Lower body stays loaded the entire set. Entirely floor-based — one of the best mat-only upper/lower combos.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/2/1/5/4/3/21543.gif" alt="Bridge Skull Crusher" onerror="this.outerHTML='<div class=fallback>💀</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Glute Bridge + Skull Crusher</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes</span><span class="mc mc-p">Hamstrings</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Core</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">NML</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Push-Up → T Rotation (Balance &amp; Rotate) when you want tricep isolation alongside glute work. Hold the bridge, lower dumbbells to temples, press back. NML programme this specifically as a glute + tricep compound — both muscles loaded simultaneously throughout.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/8/7/3/9/8739.gif" alt="Arnold Press" onerror="this.outerHTML='<div class=fallback>🌀</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Arnold Press</div>
+        <div class="ex-muscles"><span class="mc mc-p">Shoulders (all 3 heads)</span><span class="mc mc-p">Triceps</span><span class="mc mc-s">Upper Chest</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Any press in either session when shoulders need more direct attention. Sit cross-legged on the mat. Start palms facing you, rotate to palms facing forward as you press overhead. The rotation recruits all three delt heads — front, side, and rear — in one movement.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><div class="fallback" style="font-size:11px;color:var(--muted);padding:10px;text-align:center;line-height:1.5;">Dumbbells overhead → kneel one leg → kneel other leg → stand back up</div></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Surrender</div>
+        <div class="ex-muscles"><span class="mc mc-p">Quads</span><span class="mc mc-p">Glutes</span><span class="mc mc-p">Shoulders</span><span class="mc mc-s">Core</span><span class="mc mc-s">Hip Flexors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">6–8 each side</span><span class="tag tag-src">Fitness Phantom</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Thruster (Power Builder) for variety. Hold dumbbells overhead throughout. Step one knee down to the mat, then the other (kneeling), then step back up. The overhead load challenges core stability and shoulders the entire time. Trains the transition between floor and standing — highly functional.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/9/4/5/16945.gif" alt="Curtsy Lunge Rotation" onerror="this.outerHTML='<div class=fallback>💃</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Curtsy Lunge + Rotation</div>
+        <div class="ex-muscles"><span class="mc mc-p">Glutes (medius)</span><span class="mc mc-p">Quads</span><span class="mc mc-p">Obliques</span><span class="mc mc-s">Adductors</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">8 each side</span><span class="tag tag-src">NASM Advanced Lunge</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Reverse Lunge → Curl (Balance &amp; Rotate). Cross one leg behind into a curtsy, rotate torso toward the front leg at the bottom, then rotate back and stand. NASM's advanced lunge pattern — the only movement that trains the frontal and rotational plane, which all other exercises in this programme miss.</div>
+      </div>
+    </div>
+
+  </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/1/6/8/6/3/16863.gif" alt="DB Russian Twist" onerror="this.outerHTML='<div class=fallback>🔄</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">DB Russian Twist</div>
+        <div class="ex-muscles"><span class="mc mc-p">Obliques</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-s">Hip Flexors</span><span class="mc mc-s">Lower Back</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">16–20 reps</span><span class="tag tag-src">Core Swap</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Bicycle Crunch (Core). Sit with knees bent and feet lifted, hold one dumbbell with both hands, rotate side to side touching the DB to the floor each rep. Feet off the floor raises the difficulty significantly. Goes heavier than bicycle crunch can — good when you want loaded oblique work over bodyweight volume.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/5/8/5/9/5859.gif" alt="Double Leg Lower" onerror="this.outerHTML='<div class=fallback>📐</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Double Leg Lower</div>
+        <div class="ex-muscles"><span class="mc mc-p">Rectus Abdominis (lower)</span><span class="mc mc-p">Hip Flexors</span><span class="mc mc-s">Transverse Abs</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 reps</span><span class="tag tag-src">Core Swap</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> Weighted Dead Bug (Core) when you want to isolate the lower rectus abdominis. Lie flat, legs raised to 90° — slowly lower both legs together toward the floor without letting your lower back arch, then raise them back. Stop before your back lifts. Harder than it looks. Add a dumbbell between your feet to increase load.</div>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-gif"><img src="https://gymvisual.com/img/p/3/8/1/5/8/38158.gif" alt="Plank Knee Tuck" onerror="this.outerHTML='<div class=fallback>🦵</div>'"></div>
+      <div class="ex-body">
+        <div class="ex-name">Plank Knee Tuck</div>
+        <div class="ex-muscles"><span class="mc mc-p">Transverse Abs</span><span class="mc mc-p">Hip Flexors</span><span class="mc mc-p">Rectus Abdominis</span><span class="mc mc-s">Obliques</span></div>
+        <div class="ex-meta"><span class="tag tag-sets">5 sets</span><span class="tag tag-reps">10–12 each side</span><span class="tag tag-src">Core Swap</span></div>
+        <div class="ex-tip"><strong>Replaces:</strong> DB Plank Pass-Through (Core) for a more hip-flexor-focused variation. From a high plank, drive one knee toward the same-side elbow, hold a beat, then return. Alternate sides. Keeps the anti-extension plank position while adding a dynamic hip flexor contraction — less anti-rotation than the pass-through, more hip flexor and lower RA.</div>
+      </div>
+    </div>
+
+  <div class="sources">
+    Sources: <a href="https://blog.nasm.org/functional-training-compound-workouts" target="_blank">NASM — Functional Training: Compound Workouts</a> · <a href="https://thefitnessphantom.com/dumbbell-compound-exercises" target="_blank">Fitness Phantom — 25 Best Dumbbell Compound Exercises</a> · <a href="https://www.nourishmovelove.com/full-body-compound-exercises/" target="_blank">NML — 9 Best Compound Exercises</a> · <a href="https://www.runstreet.com/blog/compound-exercises-with-dumbbells" target="_blank">Runstreet — Top 10 Compound Dumbbell Exercises</a>
+  </div>
+</div>
+
+<!-- ══════ OVERVIEW ══════ -->
+<div id="sec-overview" class="section">
+  <div class="sec-head">
+    <div class="sec-title">The Structure</div>
+    <div class="sec-sub">2 full-body sessions per week. Every session hits every muscle group. 15 sets total each time.</div>
+  </div>
+
+  <div class="info-box">
+    <strong>Why full-body and not splits?</strong> The "2" in 2-5-15 means each muscle is trained twice a week. A chest/back split would mean chest only gets hit on upper days. Full-body sessions ensure every muscle gets its 2× weekly stimulus — and compound movements mean 3 exercises × 5 sets = 15 sets covers the whole body simultaneously.
+  </div>
+
+  <div class="how-grid">
+    <div class="how-card"><div class="how-num" style="color:var(--gold)">2×</div><div class="how-title">Sessions Per Week</div><div class="how-body">Monday and Thursday. Each is a complete full-body workout. ~72 hrs between sessions — enough recovery, frequent enough stimulus.</div></div>
+    <div class="how-card"><div class="how-num" style="color:var(--red)">5</div><div class="how-title">Sets Per Muscle</div><div class="how-body">Each compound movement counts toward 2–3 muscle groups at once. A thruster = 5 sets for quads AND shoulders AND triceps in one go.</div></div>
+    <div class="how-card"><div class="how-num" style="color:var(--blue)">15</div><div class="how-title">Sets Per Session</div><div class="how-body">3 exercises × 5 sets = 15. With full-body compounds that's enough to hit every major muscle. Sessions take ~30–35 minutes.</div></div>
+    <div class="how-card"><div class="how-num" style="color:var(--green)">A/B</div><div class="how-title">Alternate Each Week</div><div class="how-body">Power Builder and Balance &amp; Rotate use different exercises for the same muscle groups — same stimulus, different movement pattern. This prevents accommodation over time.</div></div>
+  </div>
+
+  <div class="sec-head"><div class="sec-title" style="font-size:21px">Weekly Schedule</div></div>
+  <div class="week-grid">
+    <div class="day session-a"><div class="day-name">Mon</div><div class="day-label" style="color:var(--gold)">Power Builder</div><div class="day-dur">~35 min</div></div>
+    <div class="day rest"><div class="day-name">Tue</div><div class="day-label">Rest</div></div>
+    <div class="day rest"><div class="day-name">Wed</div><div class="day-label">Rest</div></div>
+    <div class="day session-b"><div class="day-name">Thu</div><div class="day-label" style="color:var(--blue)">Balance &amp; Rotate</div><div class="day-dur">~35 min</div></div>
+    <div class="day rest"><div class="day-name">Fri</div><div class="day-label">Rest</div></div>
+    <div class="day rest"><div class="day-name">Sat</div><div class="day-label">Rest</div></div>
+    <div class="day rest"><div class="day-name">Sun</div><div class="day-label">Rest</div></div>
+  </div>
+
+  <div class="info-box" style="background:rgba(91,155,213,.07);border-color:rgba(91,155,213,.2);">
+    <strong style="color:var(--blue)">Rest days:</strong> The method keeps rest simple. 3 days between sessions (Mon→Thu) means full recovery. If life gets in the way, Tue/Fri works just as well — just keep ~72 hrs between the two sessions.
+  </div>
+
+  <div class="info-box" style="background:rgba(200,169,110,.07);border-color:rgba(200,169,110,.2);">
+    <strong style="color:var(--gold)">Other workouts:</strong> The Workout tab dropdown also has Core, Bodyweight, Arms &amp; Abs, Classic Strength, Barracks and Carry &amp; Crawl. Classic Strength, Barracks and Carry &amp; Crawl are 5 exercises × 3 sets full-body days you can use in place of Balance &amp; Rotate. Arms &amp; Abs is for weeks when a run leaves your legs shot.
   </div>
 </div>
 
@@ -951,6 +1272,39 @@ function showTab(id, btn) {
   btn.classList.add('active');
 }
 
+function showWorkout(id) {
+  document.querySelectorAll('.wpanel').forEach(p => p.classList.remove('active'));
+  document.getElementById('wp-' + id).classList.add('active');
+  try { localStorage.setItem('workout', id); } catch (e) {}
+}
+try {
+  const saved = localStorage.getItem('workout');
+  if (saved && document.getElementById('wp-' + saved)) {
+    document.getElementById('workoutSelect').value = saved;
+    showWorkout(saved);
+  }
+} catch (e) {}
+
+// Cook Mode — keep the screen awake during a workout (Wake Lock API, same as master-chef)
+(function () {
+  const cmBtn = document.getElementById('cookMode');
+  if (!('wakeLock' in navigator)) { cmBtn.style.display = 'none'; return; }
+  let wakeLock = null, wanted = false;
+  const acquire = async () => { try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {} };
+  cmBtn.addEventListener('click', async () => {
+    wanted = !wanted;
+    if (wanted) { await acquire(); cmBtn.classList.add('on'); cmBtn.textContent = '☀️ Cook Mode on'; }
+    else {
+      if (wakeLock) { try { await wakeLock.release(); } catch (e) {} }
+      wakeLock = null; cmBtn.classList.remove('on'); cmBtn.textContent = '☀️ Cook Mode';
+    }
+  });
+  // the lock auto-releases when the tab is hidden; re-acquire when it returns
+  document.addEventListener('visibilitychange', async () => {
+    if (wanted && document.visibilityState === 'visible') await acquire();
+  });
+})();
+
 function switchProgram(prog, btn) {
   document.querySelectorAll('.prog-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -967,7 +1321,7 @@ function switchProgram(prog, btn) {
     wm.innerHTML = '<span class="n1">2</span><span class="dot">·</span><span class="n2">5</span><span class="dot">·</span><span class="n3">15</span>';
   }
   if (prog === '2515') {
-    showTab('overview', document.querySelector('#nav-2515 .tab'));
+    showTab('workout', document.querySelector('#nav-2515 .tab'));
   } else {
     showTab('ssc-overview', document.querySelector('#nav-ssc .tab'));
   }
